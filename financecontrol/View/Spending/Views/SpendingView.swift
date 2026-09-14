@@ -239,7 +239,7 @@ struct SpendingView: View {
     }
     
     private var commentSection: some View {
-        Section(header: Text("Comment"), footer: returnAndDeleteButtons) {
+        Section(header: Text("Description"), footer: returnAndDeleteButtons) {
             if let comment = safeEntity.comment, !comment.isEmpty {
                 ZStack(alignment: .leading) {
                     Rectangle()
@@ -252,7 +252,7 @@ struct SpendingView: View {
                     Rectangle()
                         .foregroundColor(.init(uiColor: .secondarySystemGroupedBackground))
                     
-                    Text("No comment provided")
+                    Text("No description provided")
                         .foregroundColor(.secondary)
                 }
             }

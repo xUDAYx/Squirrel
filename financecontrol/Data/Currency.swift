@@ -44,7 +44,7 @@ extension Currency: Comparable {
 }
 
 extension Locale {
-    func getCurrency() -> Squirrel.Currency? {
+    func getCurrency() -> Galla.Currency? {
         let currencyCode = {
             if #available(iOS 16, *) {
                 return self.currency?.identifier

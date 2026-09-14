@@ -17,7 +17,7 @@ struct OnboardingWelcomeView: View {
         HStack {
             VStack(alignment: .leading, spacing: 0) {
                 if showIcon {
-                    Image(.onboarding)
+                    Image(systemName: "wallet.pass.fill")
                         .clipShape(RoundedRectangle(cornerRadius: 30))
                         .overlay {
                             RoundedRectangle(cornerRadius: 30)

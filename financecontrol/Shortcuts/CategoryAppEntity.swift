@@ -42,11 +42,19 @@ struct CategoryEntityQuery: EntityQuery {
         return try await context.perform {
             let request = CategoryEntity.fetchRequest()
             request.predicate = NSPredicate(format: "isShadowed == false")
-            request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
             let results = try context.fetch(request)
             return results.compactMap { entity in
                 guard let id = entity.id, let name = entity.name else { return nil }
                 return CategoryAppEntity(id: id, name: name)
+            }.sorted { first, second in
+                let firstOrder = DefaultCategories.orderByName[first.name] ?? Int.max
+                let secondOrder = DefaultCategories.orderByName[second.name] ?? Int.max
+
+                if firstOrder == secondOrder {
+                    return first.name.localizedCaseInsensitiveCompare(second.name) == .orderedAscending
+                }
+
+                return firstOrder < secondOrder
             }
         }
     }

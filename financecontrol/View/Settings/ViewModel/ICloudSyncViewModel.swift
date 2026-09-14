@@ -20,10 +20,14 @@ final class ICloudSyncViewModel: ObservableObject {
     }
     
     func updateDataStatus() async {
+#if LOCAL_DEVELOPMENT
+        return
+#else
         let result = await CloudKitManager.shared.hasDataInCloudKit()
         
         await MainActor.run { [weak self] in
             self?.dataStoredInCloudKit = result
         }
+#endif
     }
 }

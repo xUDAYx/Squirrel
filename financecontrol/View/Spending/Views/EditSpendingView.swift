@@ -149,9 +149,9 @@ struct EditSpendingView: View {
     }
     
     private var commentSection: some View {
-        Section(header: Text("Comment"), footer: returnAndDeleteButtons) {
+        Section(header: Text("Description"), footer: returnAndDeleteButtons) {
             if #available(iOS 16.0, *) {
-                TextField("Comment (Optional)", text: $vm.comment, axis: .vertical)
+                TextField("Description (Optional)", text: $vm.comment, axis: .vertical)
                     .focused($focusedField, equals: .comment)
             } else {
                 TextEditor(text: $vm.comment)

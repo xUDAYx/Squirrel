@@ -18,6 +18,14 @@ struct ICloudSyncView: View {
     
     @ScaledMetric
     private var imageSize: CGFloat = 50
+
+    private var cloudKitAvailable: Bool {
+#if LOCAL_DEVELOPMENT
+        false
+#else
+        CloudKitManager.shared.accountStatus == .available
+#endif
+    }
     
     init(cloudSyncWasEnabled: Bool) {
         self.cloudSyncWasEnabled = cloudSyncWasEnabled
@@ -53,10 +61,10 @@ struct ICloudSyncView: View {
                 Button(kvsManager.iCloudSync ? "Disable iCloud Sync" : "Enable iCloud Sync") {
                     kvsManager.iCloudSync.toggle()
                 }
-                .disabled(CloudKitManager.shared.accountStatus != .available)
+                .disabled(!cloudKitAvailable)
             } footer: {
                 VStack {
-                    if CloudKitManager.shared.accountStatus != .available {
+                    if !cloudKitAvailable {
                         Text("sign-in-to-icloud-key")
                     }
                     

@@ -12,7 +12,10 @@ import OSLog
 
 func launch() {
     let dateFormatter = ISO8601DateFormatter()
-    #if DEBUG
+    if #available(iOS 16.4, *) {
+        GallaShortcutsProvider.updateAppShortcutParameters()
+    }
+    #if DEBUG && !LOCAL_DEVELOPMENT
     let _ = CloudKitManager.shared
     #endif
     

@@ -59,7 +59,7 @@ struct AccessoryCircularAddExpenseViewPreviews: PreviewProvider {
             AccessoryCircularAddExpenseView(
                 entry: .init(
                     date: .init(),
-                    image: { Image(.squirrelLogo) },
+                    image: { Image(systemName: "plus.circle.fill") },
                     url: URL(string:"financecontrol://addExpense")
                 )
             )

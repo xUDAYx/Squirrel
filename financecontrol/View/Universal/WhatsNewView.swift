@@ -90,7 +90,7 @@ struct WhatsNewView: View {
     private var smallHeader: some View {
         HStack {
             if #available(iOS 26.0, *) {
-                Image(.onboarding)
+                Image(systemName: "wallet.pass.fill")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 80, height: 80)
@@ -98,7 +98,7 @@ struct WhatsNewView: View {
                     .glassEffect(.clear.interactive(), in: RoundedRectangle(cornerRadius: 15))
                 
             } else {
-                Image(.onboarding)
+                Image(systemName: "wallet.pass.fill")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 80, height: 80)
@@ -123,11 +123,11 @@ struct WhatsNewView: View {
         VStack {
             if #available(iOS 26.0, *) {
                 ViewThatFits {
-                    Image(.onboarding)
+                    Image(systemName: "wallet.pass.fill")
                         .clipShape(RoundedRectangle(cornerRadius: 30))
                         .glassEffect(.clear.interactive(), in: RoundedRectangle(cornerRadius: 30))
                     
-                    Image(.onboarding)
+                    Image(systemName: "wallet.pass.fill")
                         .resizable()
                         .clipShape(RoundedRectangle(cornerRadius: 30))
                         .aspectRatio(contentMode: .fit)
@@ -139,7 +139,7 @@ struct WhatsNewView: View {
                 
             } else if #available(iOS 16.0, *) {
                 ViewThatFits {
-                    Image(.onboarding)
+                    Image(systemName: "wallet.pass.fill")
                         .clipShape(RoundedRectangle(cornerRadius: 30))
                         .overlay {
                             RoundedRectangle(cornerRadius: 30)
@@ -148,7 +148,7 @@ struct WhatsNewView: View {
                                 .opacity(0.3)
                         }
                     
-                    Image(.onboarding)
+                    Image(systemName: "wallet.pass.fill")
                         .resizable()
                         .clipShape(RoundedRectangle(cornerRadius: 30))
                         .overlay {
@@ -160,7 +160,7 @@ struct WhatsNewView: View {
                         .aspectRatio(contentMode: .fit)
                 }
             } else {
-                Image(.onboarding)
+                Image(systemName: "wallet.pass.fill")
                     .resizable()
                     .clipShape(RoundedRectangle(cornerRadius: 30))
                     .overlay {

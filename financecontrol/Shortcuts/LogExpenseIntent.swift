@@ -14,10 +14,16 @@ struct LogExpenseIntent: AppIntent {
     static var description: IntentDescription = "Quickly add an expense to Galla"
     static var openAppWhenRun: Bool = false
 
-    @Parameter(title: "Amount")
+    @Parameter(
+        title: "Amount",
+        requestValueDialog: "Please enter your expense amount"
+    )
     var amount: Double
 
-    @Parameter(title: "Category")
+    @Parameter(
+        title: "Category",
+        requestValueDialog: "Choose a category"
+    )
     var category: CategoryAppEntity
 
     @Parameter(title: "Currency", default: nil)
@@ -26,7 +32,11 @@ struct LogExpenseIntent: AppIntent {
     @Parameter(title: "Place", default: nil)
     var place: String?
 
-    @Parameter(title: "Comment", default: nil)
+    @Parameter(
+        title: "Description",
+        description: "An optional note about this expense",
+        default: nil
+    )
     var comment: String?
 
     func perform() async throws -> some IntentResult & ProvidesDialog {

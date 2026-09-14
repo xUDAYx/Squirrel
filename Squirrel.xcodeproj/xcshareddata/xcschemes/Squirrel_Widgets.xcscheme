@@ -30,7 +30,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8DBFEBC92A49ED4800165414"
-               BuildableName = "Squirrel.app"
+               BuildableName = "Galla.app"
                BlueprintName = "Squirrel"
                ReferencedContainer = "container:Squirrel.xcodeproj">
             </BuildableReference>
@@ -61,7 +61,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8DBFEBC92A49ED4800165414"
-            BuildableName = "Squirrel.app"
+            BuildableName = "Galla.app"
             BlueprintName = "Squirrel"
             ReferencedContainer = "container:Squirrel.xcodeproj">
          </BuildableReference>
@@ -97,7 +97,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8DBFEBC92A49ED4800165414"
-            BuildableName = "Squirrel.app"
+            BuildableName = "Galla.app"
             BlueprintName = "Squirrel"
             ReferencedContainer = "container:Squirrel.xcodeproj">
          </BuildableReference>

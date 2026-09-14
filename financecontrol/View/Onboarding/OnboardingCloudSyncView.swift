@@ -51,9 +51,19 @@ struct OnboardingCloudSyncView: View {
 struct CloudSyncView: View {
     @EnvironmentObject
     private var kvsManager: CloudKitKVSManager
-    
+
+#if !LOCAL_DEVELOPMENT
     @ObservedObject
     private var ckManager = CloudKitManager.shared
+#endif
+
+    private var cloudKitAvailable: Bool {
+#if LOCAL_DEVELOPMENT
+        false
+#else
+        ckManager.accountStatus == .available
+#endif
+    }
     
     private var padding: CGFloat {
         if #available(iOS 26.0, *) {
@@ -75,7 +85,7 @@ struct CloudSyncView: View {
         } label: {
             Text(kvsManager.iCloudSync ? "Disable iCloud sync" : "Enable iCloud sync")
                 .font(.body)
-                .foregroundColor(ckManager.accountStatus != .available ? .secondary : .orange)
+                .foregroundColor(cloudKitAvailable ? .orange : .secondary)
                 .padding(.horizontal)
                 .padding(.vertical, padding)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -84,10 +94,10 @@ struct CloudSyncView: View {
                         .fill(Color(uiColor: .secondarySystemGroupedBackground))
                 }
         }
-        .disabled(ckManager.accountStatus != .available)
+        .disabled(!cloudKitAvailable)
         .buttonStyle(.plain)
         
-        if ckManager.accountStatus != .available {
+        if !cloudKitAvailable {
             Text("sign-in-to-icloud-key")
                 .font(.footnote)
                 .foregroundStyle(.red)

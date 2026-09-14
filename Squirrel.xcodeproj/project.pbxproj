@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A11CE0012F7A000100000001 /* LogExpenseIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE0012F7A000100000011 /* LogExpenseIntent.swift */; };
+		A11CE0012F7A000100000002 /* CategoryAppEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE0012F7A000100000012 /* CategoryAppEntity.swift */; };
+		A11CE0012F7A000100000003 /* GallaShortcutsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE0012F7A000100000013 /* SquirrelShortcutsProvider.swift */; };
+		A11CE0012F7A000100000004 /* ShortcutsTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE0012F7A000100000014 /* ShortcutsTipView.swift */; };
 		8D00D75C2B5801C900E8C70D /* Vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D00D75B2B5801C900E8C70D /* Vars.swift */; };
 		8D00D75D2B5801C900E8C70D /* Vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D00D75B2B5801C900E8C70D /* Vars.swift */; };
 		8D02AA792CBFE63300C4B4F6 /* ExportCSVView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D02AA782CBFE63300C4B4F6 /* ExportCSVView.swift */; };
@@ -131,7 +135,6 @@
 		8D9DD6712D317EE60061DA6B /* WhatsNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9DD6702D317EE60061DA6B /* WhatsNewView.swift */; };
 		8D9E22D82AE6A1BD00801932 /* CustomShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9E22D72AE6A1BD00801932 /* CustomShareSheet.swift */; };
 		8D9F30E92B4D7C3E00A0B8C3 /* WidgetsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9F30E82B4D7C3E00A0B8C3 /* WidgetsManager.swift */; };
-		8DA2DC6B2EE1D34100EE3B47 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 8DA2DC6A2EE1D34100EE3B47 /* AppIcon.icon */; };
 		8DA2E5102C24662F00FA7FDB /* ReturnRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA2E50F2C24662F00FA7FDB /* ReturnRow.swift */; };
 		8DAA0E1F2B48367D0076B81E /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DAA0E1E2B48367D0076B81E /* WidgetKit.framework */; };
 		8DAA0E212B48367D0076B81E /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DAA0E202B48367D0076B81E /* SwiftUI.framework */; };
@@ -227,6 +230,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A11CE0012F7A000100000011 /* LogExpenseIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogExpenseIntent.swift; sourceTree = "<group>"; };
+		A11CE0012F7A000100000012 /* CategoryAppEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryAppEntity.swift; sourceTree = "<group>"; };
+		A11CE0012F7A000100000013 /* SquirrelShortcutsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquirrelShortcutsProvider.swift; sourceTree = "<group>"; };
+		A11CE0012F7A000100000014 /* ShortcutsTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ShortcutsTipView.swift; path = View/Settings/Views/ShortcutsTipView.swift; sourceTree = "<group>"; };
 		8D00D75B2B5801C900E8C70D /* Vars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vars.swift; sourceTree = "<group>"; };
 		8D02AA782CBFE63300C4B4F6 /* ExportCSVView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportCSVView.swift; sourceTree = "<group>"; };
 		8D02AA7A2CBFE69900C4B4F6 /* ExportCSVViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportCSVViewModel.swift; sourceTree = "<group>"; };
@@ -345,7 +352,6 @@
 		8D9DD6702D317EE60061DA6B /* WhatsNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewView.swift; sourceTree = "<group>"; };
 		8D9E22D72AE6A1BD00801932 /* CustomShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomShareSheet.swift; sourceTree = "<group>"; };
 		8D9F30E82B4D7C3E00A0B8C3 /* WidgetsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsManager.swift; sourceTree = "<group>"; };
-		8DA2DC6A2EE1D34100EE3B47 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		8DA2E50F2C24662F00FA7FDB /* ReturnRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnRow.swift; sourceTree = "<group>"; };
 		8DAA0E1C2B48367D0076B81E /* SquirrelWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SquirrelWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DAA0E1E2B48367D0076B81E /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -439,6 +445,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A11CE0012F7A000100000020 /* Shortcuts */ = {
+			isa = PBXGroup;
+			children = (
+				A11CE0012F7A000100000011 /* LogExpenseIntent.swift */,
+				A11CE0012F7A000100000012 /* CategoryAppEntity.swift */,
+				A11CE0012F7A000100000013 /* SquirrelShortcutsProvider.swift */,
+			);
+			path = Shortcuts;
+			sourceTree = "<group>";
+		};
 		8D043F6B2B51A99600F2F560 /* Widget */ = {
 			isa = PBXGroup;
 			children = (
@@ -752,7 +768,6 @@
 		8DA2DC692EE1D32000EE3B47 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
-				8DA2DC6A2EE1D34100EE3B47 /* AppIcon.icon */,
 			);
 			path = Icons;
 			sourceTree = "<group>";
@@ -975,6 +990,8 @@
 		8DBFEBCC2A49ED4800165414 /* financecontrol */ = {
 			isa = PBXGroup;
 			children = (
+				A11CE0012F7A000100000020 /* Shortcuts */,
+				A11CE0012F7A000100000014 /* ShortcutsTipView.swift */,
 				8DAA0E322B4871F40076B81E /* financecontrol.entitlements */,
 				8D9B50132AC1BE9700C7732B /* Info.plist */,
 				8D7FCA542B16A59C009AAAEB /* Localizable.xcstrings */,
@@ -1158,7 +1175,6 @@
 				8DF8AE9C2AB47334006D287B /* .gitignore in Resources */,
 				8D4FE3002BA9D954001009F2 /* PrivacyInfo.xcprivacy in Resources */,
 				8D7FCA552B16A59C009AAAEB /* Localizable.xcstrings in Resources */,
-				8DA2DC6B2EE1D34100EE3B47 /* AppIcon.icon in Resources */,
 				8D1A7FB72C99DD2E00BAF6A0 /* LICENSE in Resources */,
 				8D4927672AB2128F008E6347 /* README.md in Resources */,
 				8DBFEBD22A49ED4900165414 /* Assets.xcassets in Resources */,
@@ -1213,6 +1229,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A11CE0012F7A000100000001 /* LogExpenseIntent.swift in Sources */,
+				A11CE0012F7A000100000002 /* CategoryAppEntity.swift in Sources */,
+				A11CE0012F7A000100000003 /* GallaShortcutsProvider.swift in Sources */,
+				A11CE0012F7A000100000004 /* ShortcutsTipView.swift in Sources */,
 				8D0681102B6D466600195205 /* PieChartCompleteView.swift in Sources */,
 				8D39C6932B1F3C9500F40FD6 /* EditReturnView.swift in Sources */,
 				8D1E71E32AAEFED6004A17B4 /* Color+Extensions.swift in Sources */,
@@ -1382,14 +1402,14 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CH9U3U8NK9;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2024, PinkXaciD";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.squirrelapp.squirrelTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xudayx.gallaTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1408,14 +1428,14 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CH9U3U8NK9;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2024, PinkXaciD";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.squirrelapp.squirrelTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xudayx.gallaTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -1432,15 +1452,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_ENTITLEMENTS = financecontrolWidget/financecontrolWidgetExtension.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 92;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CH9U3U8NK9;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = financecontrolWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = financecontrolWidget;
+				INFOPLIST_KEY_CFBundleDisplayName = "Galla Widget";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1451,7 +1471,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.3.1;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.squirrelapp.squirreldebug.squirrelWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xudayx.galla.gallaWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -1475,11 +1495,11 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 92;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CH9U3U8NK9;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = financecontrolWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = financecontrolWidget;
+				INFOPLIST_KEY_CFBundleDisplayName = "Galla Widget";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1490,7 +1510,7 @@
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.3.1;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.squirrelapp.squirrel.squirrelWidget;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xudayx.galla.gallaWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -1631,20 +1651,18 @@
 		8DBFEBEF2A49ED4900165414 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = AppIcon_FirstFlight;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
-				CODE_SIGN_ENTITLEMENTS = financecontrol/financecontrol.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 92;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CH9U3U8NK9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = financecontrol/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Squirrel_Dev;
+				INFOPLIST_KEY_CFBundleDisplayName = Galla;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2024, PinkXaciD";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1659,13 +1677,14 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.3.1;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.squirrelapp.squirreldebug;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.xudayx.galla;
+				PRODUCT_NAME = Galla;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG LOCAL_DEVELOPMENT $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1675,20 +1694,18 @@
 		8DBFEBF02A49ED4900165414 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = AppIcon_FirstFlight;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = financecontrol/financecontrol.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 92;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = CH9U3U8NK9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = financecontrol/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Squirrel;
+				INFOPLIST_KEY_CFBundleDisplayName = Galla;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2024, PinkXaciD";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -1703,8 +1720,8 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.3.1;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.squirrelapp.squirrel;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.xudayx.galla;
+				PRODUCT_NAME = Galla;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;

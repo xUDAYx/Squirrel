@@ -265,7 +265,7 @@ struct AddSpendingView: View {
                 }
                 
             if #available(iOS 16.0, *) {
-                TextField("Comment", text: $vm.comment, axis: .vertical)
+                TextField("Description (Optional)", text: $vm.comment, axis: .vertical)
                     .focused($focusedField, equals: .comment)
             } else {
                 TextEditor(text: $vm.comment)
@@ -273,7 +273,7 @@ struct AddSpendingView: View {
                     .focused($focusedField, equals: .comment)
                     .overlay(alignment: .leading) {
                         if vm.comment.isEmpty {
-                            Text("Comment")
+                            Text("Description (Optional)")
                                 .foregroundColor(.secondary.opacity(0.5))
                         }
                     }
@@ -315,7 +315,7 @@ struct AddSpendingView: View {
             }
             
             if vm.comment.count > 300 {
-                Text("Comment is too long")
+                Text("Description is too long")
                     .foregroundColor(.red)
             }
         }
