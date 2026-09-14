@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CA0A00022F97140100000002 /* AnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0A00012F97140100000001 /* AnalyticsView.swift */; };
 		A11CE0012F7A000100000001 /* LogExpenseIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE0012F7A000100000011 /* LogExpenseIntent.swift */; };
 		A11CE0012F7A000100000002 /* CategoryAppEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE0012F7A000100000012 /* CategoryAppEntity.swift */; };
 		A11CE0012F7A000100000003 /* GallaShortcutsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE0012F7A000100000013 /* SquirrelShortcutsProvider.swift */; };
@@ -230,6 +231,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		CA0A00012F97140100000001 /* AnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsView.swift; sourceTree = "<group>"; };
 		A11CE0012F7A000100000011 /* LogExpenseIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogExpenseIntent.swift; sourceTree = "<group>"; };
 		A11CE0012F7A000100000012 /* CategoryAppEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryAppEntity.swift; sourceTree = "<group>"; };
 		A11CE0012F7A000100000013 /* SquirrelShortcutsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquirrelShortcutsProvider.swift; sourceTree = "<group>"; };
@@ -551,6 +553,14 @@
 				8DD1C6F32F27BB8800337689 /* SuggestionsOverlayManager.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		CA0A00032F97140100000003 /* Analytics */ = {
+			isa = PBXGroup;
+			children = (
+				CA0A00012F97140100000001 /* AnalyticsView.swift */,
+			);
+			path = Analytics;
 			sourceTree = "<group>";
 		};
 		8D406EA32A9A365B002D3ED1 /* Stats */ = {
@@ -1016,6 +1026,7 @@
 				8DBFEBCF2A49ED4800165414 /* ContentView.swift */,
 				8D406EA52A9A368B002D3ED1 /* Home */,
 				8D406EA32A9A365B002D3ED1 /* Stats */,
+				CA0A00032F97140100000003 /* Analytics */,
 				8D406EA72A9A36A6002D3ED1 /* Settings */,
 				8D4B69A92A66ED40008F098B /* Selectors */,
 				8D5894942A829D8C00A6DB65 /* Spending */,
@@ -1268,6 +1279,7 @@
 				8DAFF8A62B39CEDD001D5A9D /* CoreDataModel.swift in Sources */,
 				8DFA1EDE2B4C163100B97113 /* CustomIcon.swift in Sources */,
 				8DB294BA2A7C0FF800170BA2 /* NumbersViewModifier.swift in Sources */,
+				CA0A00022F97140100000002 /* AnalyticsView.swift in Sources */,
 				8DBFEBD02A49ED4800165414 /* ContentView.swift in Sources */,
 				8D6E441D2B18D63600FDFF9D /* AddReturnView.swift in Sources */,
 				8D0F2FA92F193E7800F7E96E /* Place.swift in Sources */,

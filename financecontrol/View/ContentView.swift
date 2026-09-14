@@ -101,18 +101,22 @@ struct ContentView: View {
                 NavigationStack {
                     TabView(selection: selection) {
                         homeTab
-                        
+
                         statsTab
-                        
+
+                        analyticsTab
+
                         settingsTab
                     }
                 }
             } else {
                 TabView(selection: selection) {
                     homeTab
-                    
+
                     statsTab
-                    
+
+                    analyticsTab
+
                     settingsTab
                 }
             }
@@ -210,6 +214,14 @@ struct ContentView: View {
             .tag(1)
     }
     
+    private var analyticsTab: some View {
+        AnalyticsView()
+            .tabItem {
+                Label("Analytics", systemImage: "chart.bar.xaxis")
+            }
+            .tag(2)
+    }
+
     private var settingsTab: some View {
         SettingsView(
             showDarkModeToggle: !autoDarkMode,
@@ -223,7 +235,7 @@ struct ContentView: View {
         .tabItem {
             Label("Settings", systemImage: "gearshape.fill")
         }
-        .tag(2)
+        .tag(3)
         .badge(cloudKitKVSManager.iCloudSync != cloudSyncWasEnabled ? 1 : 0)
     }
     

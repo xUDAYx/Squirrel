@@ -26,8 +26,10 @@ struct AddCategoryView: View {
     
     @State
     var oklch: OKLCH
-    
-    @State 
+
+    var isIncome: Bool = false
+
+    @State
     private var name: String = ""
     @State
     private var triedToSave: Bool = false
@@ -108,9 +110,9 @@ struct AddCategoryView: View {
                     HapticManager.shared.notification(.warning)
                 } else {
                     if insert {
-                        selectedCategory = cdm.addCategory(name: name, color: oklch.h.formatted(.number.precision(.fractionLength(3))))
+                        selectedCategory = cdm.addCategory(name: name, color: oklch.h.formatted(.number.precision(.fractionLength(3))), isIncome: isIncome)
                     } else {
-                        _ = cdm.addCategory(name: name, color: oklch.h.formatted(.number.precision(.fractionLength(3))))
+                        _ = cdm.addCategory(name: name, color: oklch.h.formatted(.number.precision(.fractionLength(3))), isIncome: isIncome)
                     }
                     
                     HapticManager.shared.notification(.success)

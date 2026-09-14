@@ -4,6 +4,7 @@
         <attribute name="color" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="isFavorite" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isIncome" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="isShadowed" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="spendings" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="SpendingEntity" inverseName="category" inverseEntity="SpendingEntity"/>

@@ -18,7 +18,17 @@ struct CategoriesEditView: View {
     private var categories: FetchedResults<CategoryEntity>
     @FetchRequest(sortDescriptors: [NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.caseInsensitiveCompare))], predicate: NSPredicate(format: "isShadowed == true"), animation: .default)
     private var shadowedCategories: FetchedResults<CategoryEntity>
-    
+
+    @State private var selectedTab: Int = 0
+
+    private var filteredCategories: [CategoryEntity] {
+        categories.filter { selectedTab == 0 ? !$0.isIncome : $0.isIncome }
+    }
+
+    private var filteredShadowedCount: Int {
+        shadowedCategories.filter { selectedTab == 0 ? !$0.isIncome : $0.isIncome }.count
+    }
+
     var usedColors: [OKLCH] {
         var result = Set<OKLCH>()
         
@@ -87,9 +97,18 @@ struct CategoriesEditView: View {
     
     private var content: some View {
         List {
-            if !categories.isEmpty {
+            Section {
+                Picker("Category Type", selection: $selectedTab) {
+                    Text("Expenses").tag(0)
+                    Text("Income").tag(1)
+                }
+                .pickerStyle(.segmented)
+            }
+            .listRowBackground(EmptyView())
+
+            if !filteredCategories.isEmpty {
                 Section {
-                    ForEach(categories) { entity in
+                    ForEach(filteredCategories) { entity in
                         CategoryRow(category: entity, usedColors: usedColors, unusedColors: unusedColors)
                     }
                 }
@@ -103,9 +122,10 @@ struct CategoriesEditView: View {
                 .frame(maxWidth: .infinity)
                 .listRowBackground(EmptyView())
             }
-            
+
             manageCategoriesSection
         }
+        .animation(.default, value: selectedTab)
         .navigationTitle("Categories")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -118,17 +138,18 @@ struct CategoriesEditView: View {
                     insert: false,
                     colors: usedColors,
                     unusedColors: unusedColors,
-                    oklch: OKLCH(lightness: colorScheme.colorLightness, chroma: CategoryColorValues.chroma)
+                    oklch: OKLCH(lightness: colorScheme.colorLightness, chroma: CategoryColorValues.chroma),
+                    isIncome: selectedTab == 1
                 )
             }
-            
+
             NavigationLink {
                 ShadowedCategoriesView(categories: shadowedCategories)
             } label: {
                 HStack {
                     Text("Archived Categories")
                     Spacer()
-                    Text(shadowedCategories.count.formatted())
+                    Text(filteredShadowedCount.formatted())
                         .foregroundStyle(.secondary)
                 }
             }
@@ -142,7 +163,8 @@ struct CategoriesEditView: View {
                 insert: false,
                 colors: usedColors,
                 unusedColors: unusedColors,
-                oklch: OKLCH(lightness: colorScheme.colorLightness, chroma: CategoryColorValues.chroma)
+                oklch: OKLCH(lightness: colorScheme.colorLightness, chroma: CategoryColorValues.chroma),
+                isIncome: selectedTab == 1
             )
         } label: {
             Label("Add new category", systemImage: "plus")

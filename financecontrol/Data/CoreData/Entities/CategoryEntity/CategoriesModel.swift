@@ -28,22 +28,23 @@ extension CoreDataModel {
         }
     }
     
-    func addCategory(name: String, color: String) -> CategoryEntity? {
+    func addCategory(name: String, color: String, isIncome: Bool = false) -> CategoryEntity? {
         if let description = NSEntityDescription.entity(forEntityName: "CategoryEntity", in: context) {
-            
+
             let newCategory = CategoryEntity(entity: description, insertInto: context)
-            
+
             let id = UUID()
             newCategory.id = id
             newCategory.name = name
             newCategory.color = color
+            newCategory.isIncome = isIncome
             newCategory.isShadowed = false
-            
+
             manager.save()
-            
+
             return newCategory
         }
-        
+
         return nil
     }
     

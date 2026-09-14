@@ -11,22 +11,28 @@ enum DefaultCategories {
     struct Category {
         let name: String
         let color: String
+        let isIncome: Bool
     }
 
     static let all: [Category] = [
-        .init(name: "🏠 Housing", color: "15"),
-        .init(name: "🍽️ Food", color: "55"),
-        .init(name: "🛒 Groceries", color: "90"),
-        .init(name: "💡 Utilities", color: "130"),
-        .init(name: "🚗 Transportation", color: "190"),
-        .init(name: "🛍️ Shopping", color: "260"),
-        .init(name: "👕 Clothes", color: "310"),
-        .init(name: "🍻 Going out", color: "35"),
-        .init(name: "🍿 Entertainment", color: "220"),
-        .init(name: "📅 Subscription", color: "285"),
-        .init(name: "🤹 Extras", color: "170"),
-        .init(name: "💰 Salary", color: "75"),
-        .init(name: "📊 Investments", color: "245")
+        .init(name: "🏠 Housing", color: "15", isIncome: false),
+        .init(name: "🍽️ Food", color: "55", isIncome: false),
+        .init(name: "🛒 Groceries", color: "90", isIncome: false),
+        .init(name: "💡 Utilities", color: "130", isIncome: false),
+        .init(name: "🚗 Transportation", color: "190", isIncome: false),
+        .init(name: "🛍️ Shopping", color: "260", isIncome: false),
+        .init(name: "👕 Clothes", color: "310", isIncome: false),
+        .init(name: "🍻 Going out", color: "35", isIncome: false),
+        .init(name: "🍿 Entertainment", color: "220", isIncome: false),
+        .init(name: "📅 Subscription", color: "285", isIncome: false),
+        .init(name: "🤹 Extras", color: "170", isIncome: false),
+        .init(name: "💰 Salary", color: "75", isIncome: true),
+        .init(name: "📊 Investments", color: "245", isIncome: true),
+        .init(name: "🧑‍💼 Part-Time", color: "100", isIncome: true),
+        .init(name: "🏦 Savings", color: "150", isIncome: true),
+        .init(name: "🆘 Emergency Fund", color: "200", isIncome: true),
+        .init(name: "💵 Tips", color: "50", isIncome: true),
+        .init(name: "🏖️ Retirement Fund", color: "270", isIncome: true)
     ]
 
     static let orderByName = Dictionary(
@@ -51,7 +57,7 @@ final class DataManager {
     static let shared = DataManager()
 
     private static let defaultCategoriesSeedKey = "gallaDefaultCategoriesSeeded"
-    private static let defaultCategoriesSeedVersion = 3
+    private static let defaultCategoriesSeedVersion = 4
     
     let container: NSPersistentContainer
     let context: NSManagedObjectContext
@@ -135,6 +141,7 @@ final class DataManager {
 
                     primary.name = category.name
                     primary.color = primary.color ?? category.color
+                    primary.isIncome = category.isIncome
                     primary.isShadowed = false
 
                     for duplicate in matches where duplicate.objectID != primary.objectID {

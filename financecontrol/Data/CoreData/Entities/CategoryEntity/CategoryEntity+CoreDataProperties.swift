@@ -17,6 +17,7 @@ extension CategoryEntity {
 
     @NSManaged public var color: String?
     @NSManaged public var id: UUID?
+    @NSManaged public var isIncome: Bool
     @NSManaged public var isShadowed: Bool
     @NSManaged public var isFavorite: Bool
     @NSManaged public var name: String?
@@ -58,6 +59,7 @@ extension CategoryEntity: ToSafeObject {
         return TSCategoryEntity(
             color: color,
             id: id,
+            isIncome: isIncome,
             isShadowed: isShadowed,
             isFavorite: isFavorite,
             name: name,
@@ -103,6 +105,7 @@ struct TSCategoryEntity: ToUnsafeObject, Identifiable, Comparable {
     
     let color: String?
     let id: UUID?
+    let isIncome: Bool
     let isShadowed: Bool
     let isFavorite: Bool
     let name: String?
@@ -132,9 +135,10 @@ struct TSCategoryEntity: ToUnsafeObject, Identifiable, Comparable {
     
     /// Memberwise initializer
     /// - Important: You can crerate object with this initializer, but to convert created object to CoreData class you need to be sure that `id` you passed is valid and CoreData class with such id exists and can be fetched
-    init(color: String?, id: UUID?, isShadowed: Bool, isFavorite: Bool, name: String?, spendings: [TSSpendingEntity]) {
+    init(color: String?, id: UUID?, isIncome: Bool = false, isShadowed: Bool, isFavorite: Bool, name: String?, spendings: [TSSpendingEntity]) {
         self.color = color
         self.id = id
+        self.isIncome = isIncome
         self.isShadowed = isShadowed
         self.isFavorite = isFavorite
         self.name = name
@@ -147,6 +151,7 @@ struct TSCategoryEntity: ToUnsafeObject, Identifiable, Comparable {
     init(_ category: CategoryEntity) {
         self.color = category.color
         self.id = category.id
+        self.isIncome = category.isIncome
         self.isShadowed = category.isShadowed
         self.isFavorite = category.isFavorite
         self.name = category.name
