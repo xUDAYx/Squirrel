@@ -1,6 +1,6 @@
 //
 //  LogExpenseIntent.swift
-//  Squirrel
+//  Galla
 //
 //  Siri Shortcuts support — log an expense without opening the app.
 //
@@ -16,7 +16,7 @@ struct LogExpenseIntent: AppIntent {
 
     @Parameter(
         title: "Amount",
-        requestValueDialog: "Please enter your expense amount"
+        requestValueDialog: "How much did you spend?"
     )
     var amount: Double
 
@@ -32,14 +32,9 @@ struct LogExpenseIntent: AppIntent {
     @Parameter(title: "Place", default: nil)
     var place: String?
 
-    @Parameter(
-        title: "Description",
-        description: "An optional note about this expense",
-        default: nil
-    )
-    var comment: String?
-
     func perform() async throws -> some IntentResult & ProvidesDialog {
+        let note: String = try await $comment.requestValue("Add a name/description")
+
         let resolvedCurrency = currencyCode ?? UserDefaults.standard.string(forKey: UDKey.defaultCurrency.rawValue) ?? Locale.current.currencyCode ?? "USD"
 
         let rates = UserDefaults.standard.getRates() ?? Rates.fallback.rates
@@ -53,7 +48,7 @@ struct LogExpenseIntent: AppIntent {
             date: Date(),
             place: (place ?? "").trimmingCharacters(in: .whitespacesAndNewlines),
             categoryId: category.id,
-            comment: (comment ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+            comment: note.trimmingCharacters(in: .whitespacesAndNewlines)
         )
 
         try await saveSpending(spending)
@@ -61,6 +56,13 @@ struct LogExpenseIntent: AppIntent {
         let formatted = formatAmount(amount, currency: resolvedCurrency)
         return .result(dialog: "\(formatted) added under \(category.name)")
     }
+
+    @Parameter(
+        title: "Description",
+        description: "An optional note about this expense",
+        default: nil
+    )
+    var comment: String?
 
     private func formatAmount(_ value: Double, currency: String) -> String {
         let formatter = NumberFormatter()

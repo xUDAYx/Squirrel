@@ -14,16 +14,16 @@ enum DefaultCategories {
     }
 
     static let all: [Category] = [
-        .init(name: "🏠 Housing", color: "15"),
-        .init(name: "🍽️ Food", color: "55"),
-        .init(name: "🛒 Groceries", color: "90"),
         .init(name: "💡 Utilities", color: "130"),
         .init(name: "🚗 Transportation", color: "190"),
         .init(name: "🛍️ Shopping", color: "260"),
         .init(name: "👕 Clothes", color: "310"),
         .init(name: "🍻 Going out", color: "35"),
         .init(name: "🍿 Entertainment", color: "220"),
-        .init(name: "📅 Subscription", color: "285")
+        .init(name: "📅 Subscription", color: "285"),
+        .init(name: "🤹 Extras", color: "55"),
+        .init(name: "💰 Salary", color: "90"),
+        .init(name: "📊 Investments", color: "15")
     ]
 
     static let orderByName = Dictionary(
@@ -48,7 +48,7 @@ final class DataManager {
     static let shared = DataManager()
 
     private static let defaultCategoriesSeedKey = "gallaDefaultCategoriesSeeded"
-    private static let defaultCategoriesSeedVersion = 2
+    private static let defaultCategoriesSeedVersion = 3
     
     let container: NSPersistentContainer
     let context: NSManagedObjectContext
