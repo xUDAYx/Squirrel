@@ -32,7 +32,7 @@ struct LogExpenseIntent: AppIntent {
     @Parameter(title: "Place", default: nil)
     var place: String?
 
-    func perform() async throws -> some IntentResult & ProvidesDialog {
+    func perform() async throws -> some IntentResult {
         let note: String = try await $comment.requestValue("Add a name/description")
 
         let resolvedCurrency = currencyCode ?? UserDefaults.standard.string(forKey: UDKey.defaultCurrency.rawValue) ?? Locale.current.currencyCode ?? "USD"
@@ -53,8 +53,7 @@ struct LogExpenseIntent: AppIntent {
 
         try await saveSpending(spending)
 
-        let formatted = formatAmount(amount, currency: resolvedCurrency)
-        return .result(dialog: "\(formatted) added under \(category.name)")
+        return .result()
     }
 
     @Parameter(
@@ -63,14 +62,6 @@ struct LogExpenseIntent: AppIntent {
         default: nil
     )
     var comment: String?
-
-    private func formatAmount(_ value: Double, currency: String) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = currency
-        formatter.locale = .current
-        return formatter.string(from: value as NSNumber) ?? "\(value) \(currency)"
-    }
 
     private func saveSpending(_ spending: SpendingEntityLocal) async throws {
         let context = DataManager.shared.context
