@@ -90,8 +90,10 @@ struct SettingsView: View {
                 
                 currencySection
                 
-    //                shortcutsSection
-                
+                if #available(iOS 16.4, *) {
+                    shortcutsSection
+                }
+
                 categorySection
                 
                 privacySection
@@ -194,6 +196,15 @@ struct SettingsView: View {
         }
     }
     
+    @available(iOS 16.4, *)
+    private var shortcutsSection: some View {
+        Section(header: Text("Shortcuts")) {
+            NavigationLink("Siri & Shortcuts") {
+                ShortcutsTipView()
+            }
+        }
+    }
+
     var categorySection: some View {
         Section(header: Text("Categories")) {
             NavigationLink("Categories") {
