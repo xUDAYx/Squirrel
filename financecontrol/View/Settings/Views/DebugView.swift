@@ -424,7 +424,7 @@ struct DebugView: View {
     private var keychainSection: some View {
         Section {
             Button(role: .destructive) {
-                try? Keychain("api.squirrelapp.dev").removePassword()
+                try? Keychain("api.galla.dev").removePassword()
             } label: {
                 Text(verbatim: "Remove API key from keychain")
             }

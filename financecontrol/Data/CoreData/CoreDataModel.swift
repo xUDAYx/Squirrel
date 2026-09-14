@@ -229,7 +229,7 @@ extension CoreDataModel {
                     return dateFormatter
                 }
                 
-                let pathURL = tempURL.appendingPathComponent("\(Bundle.main.displayName ?? "Squirrel")_Export_\(dateFormatter.string(from: Date())).csv")
+                let pathURL = tempURL.appendingPathComponent("\(Bundle.main.displayName ?? "Galla")_Export_\(dateFormatter.string(from: Date())).csv")
                 try result.write(to: pathURL, atomically: true, encoding: .utf8)
                 HapticManager.shared.notification(.success)
                 return pathURL
@@ -271,7 +271,7 @@ extension CoreDataModel {
                         return dateFormatter
                     }
                     
-                    let pathURL = tempURL.appendingPathComponent("\(Bundle.main.displayName ?? "Squirrel")_Backup_\(dateFormatter.string(from: Date()))", conformingTo: .json)
+                    let pathURL = tempURL.appendingPathComponent("\(Bundle.main.displayName ?? "Galla")_Backup_\(dateFormatter.string(from: Date()))", conformingTo: .json)
                     try jsonString.write(to: pathURL, atomically: true, encoding: .utf8)
                     HapticManager.shared.notification(.success)
                     return pathURL

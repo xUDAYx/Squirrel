@@ -27,7 +27,7 @@ struct PrivacyPolicyView: View {
             List {
                 Section {
                     VStack(alignment: .leading) {
-                        Text("Squirrel does not send any data or identifiers from your device.")
+                        Text("Galla does not send any data or identifiers from your device.")
                         
                         expensesStorageText
                     }

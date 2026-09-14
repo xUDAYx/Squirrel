@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct SquirrelApp: App {
+struct GallaApp: App {
     init() {
         Task { @MainActor in
             launch()

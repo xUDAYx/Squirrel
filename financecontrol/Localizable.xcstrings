@@ -574,7 +574,7 @@
     "Error" : {
 
     },
-    "Even a squirrel needs a hat in winter" : {
+    "Stay warm, save smart" : {
 
     },
     "Everything that lives is designed to end. We are perpetually trapped in a never-ending spiral..." : {
@@ -971,7 +971,7 @@
     "Review on the App Store" : {
 
     },
-    "Review Squirrel on the App Store" : {
+    "Review Galla on the App Store" : {
 
     },
     "Save" : {
@@ -1037,7 +1037,7 @@
     "Show Onboarding" : {
 
     },
-    "Sign in your iCloud account on device or allow Squirrel to use iCloud in settings." : {
+    "Sign in your iCloud account on device or allow Galla to use iCloud in settings." : {
 
     },
     "sign-in-to-icloud-key" : {
@@ -1045,7 +1045,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "To use this feature, you need to sign in to iCloud on your device or allow Squirrel to use iCloud in settings."
+            "value" : "To use this feature, you need to sign in to iCloud on your device or allow Galla to use iCloud in settings."
           }
         }
       }
@@ -1071,13 +1071,13 @@
     "Something went wrong..." : {
 
     },
-    "Squirrel" : {
+    "Galla" : {
 
     },
-    "Squirrel %@" : {
+    "Galla %@" : {
 
     },
-    "Squirrel does not send any data or identifiers from your device." : {
+    "Galla does not send any data or identifiers from your device." : {
 
     },
     "Sqwoorl" : {

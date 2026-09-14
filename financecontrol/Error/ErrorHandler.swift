@@ -53,7 +53,7 @@ struct ErrorType: Identifiable, Equatable {
             self.helpAnchor = ""
             
         case URLError(.badServerResponse):
-            self.errorDescription = "Squirrel servers did not response correctly"
+            self.errorDescription = "Galla servers did not respond correctly"
             self.failureReason = urlError.localizedDescription
             self.recoverySuggestion = "Try to restart the app"
             self.helpAnchor = ""

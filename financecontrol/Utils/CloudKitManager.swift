@@ -67,7 +67,7 @@ final class CloudKitManager: ObservableObject {
                     
                     await MainActor.run {
                         CustomAlertManager.shared.addAlert(
-                            .init(type: .error, title: "iCloud sync turned off", description: "Sign in your iCloud account on device or allow Squirrel to use iCloud in settings.", systemImage: "exclamationmark.icloud.fill")
+                            .init(type: .error, title: "iCloud sync turned off", description: "Sign in your iCloud account on device or allow Galla to use iCloud in settings.", systemImage: "exclamationmark.icloud.fill")
                         )
                     }
                 }

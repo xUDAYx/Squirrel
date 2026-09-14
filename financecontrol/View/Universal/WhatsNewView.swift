@@ -51,7 +51,7 @@ struct WhatsNewView: View {
                 
                 reviewButton
                     .saturation(0.9)
-                    .confirmationDialog("Review Squirrel on the App Store", isPresented: $showReviewConfirmationDialog, titleVisibility: .visible) {
+                    .confirmationDialog("Review Galla on the App Store", isPresented: $showReviewConfirmationDialog, titleVisibility: .visible) {
                         Button("Open in the App Store") {
                             openURL(.review)
                         }
@@ -111,7 +111,7 @@ struct WhatsNewView: View {
                     }
             }
             
-            Text("What's new in \(Text("Squirrel \(Bundle.main.releaseVersionNumber ?? "")").foregroundColor(.orange))")
+            Text("What's new in \(Text("Galla \(Bundle.main.releaseVersionNumber ?? "")").foregroundColor(.orange))")
                 .font(.largeTitle)
                 .fontWeight(.heavy)
                 .padding(.leading)
@@ -172,7 +172,7 @@ struct WhatsNewView: View {
                     .aspectRatio(contentMode: .fit)
             }
             
-            Text("What's new in \(Text("Squirrel \(Bundle.main.releaseVersionNumber ?? "")").foregroundColor(.orange))")
+            Text("What's new in \(Text("Galla \(Bundle.main.releaseVersionNumber ?? "")").foregroundColor(.orange))")
                 .font(.largeTitle)
                 .fontWeight(.heavy)
                 .padding()
@@ -187,7 +187,7 @@ struct WhatsNewView: View {
             Button {
                 showReviewConfirmationDialog.toggle()
             } label: {
-                Text("Review Squirrel on the App Store")
+                Text("Review Galla on the App Store")
                     .padding(.vertical, 3.5)
                     .padding(.horizontal, 7)
             }
@@ -196,7 +196,7 @@ struct WhatsNewView: View {
             Button {
                 showReviewConfirmationDialog.toggle()
             } label: {
-                Text("Review Squirrel on the App Store")
+                Text("Review Galla on the App Store")
                     .padding(.vertical, 3.5)
                     .padding(.horizontal, 7)
             }

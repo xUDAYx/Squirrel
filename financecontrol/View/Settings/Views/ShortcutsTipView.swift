@@ -15,7 +15,7 @@ struct ShortcutsTipView: View {
             Section {
                 Label {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("\"Log expense in Squirrel\"")
+                        Text("\"Log expense in Galla\"")
                             .font(.headline)
                         Text("Say this to Siri or add the shortcut to your Home Screen, Back Tap, or Action Button.")
                             .font(.subheadline)

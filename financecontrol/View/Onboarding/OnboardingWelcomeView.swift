@@ -45,7 +45,7 @@ struct OnboardingWelcomeView: View {
                 }
                 
                 if showBottomText {
-                    Text("Squirrel")
+                    Text("Galla")
                         .foregroundColor(.orange)
                         .font(.system(size: 60, weight: .black))
                         .padding(.vertical, -10)

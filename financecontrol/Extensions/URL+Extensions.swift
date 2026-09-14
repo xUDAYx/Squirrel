@@ -8,10 +8,10 @@
 import Foundation
 
 extension URL {
-    static let addExpenseAction: URL! = URL(string: "squirrel://addExpense")
-    
+    static let addExpenseAction: URL! = URL(string: "galla://addExpense")
+
     static let github: URL = {
-        UserDefaults.standard.url(forKey: UDKey.githubURL.rawValue) ?? URL(string: "https://github.com/PinkXaciD/Squirrel")!
+        UserDefaults.standard.url(forKey: UDKey.githubURL.rawValue) ?? URL(string: "https://github.com/xUDAYx/Squirrel")!
     }()
     
     static let newGithubIssue: URL! = URL(string: "\(github.absoluteString)/issues/new")
@@ -19,7 +19,7 @@ extension URL {
     static let githubChangelog: URL! = URL(string: "\(github.absoluteString)/releases/tag/v\(Bundle.main.releaseVersionNumber ?? "")")
     
     static let appWebsite: URL = {
-        UserDefaults.standard.url(forKey: UDKey.appWebsiteURL.rawValue) ?? URL(string: "https://squirrelapp.dev")!
+        UserDefaults.standard.url(forKey: UDKey.appWebsiteURL.rawValue) ?? URL(string: "https://gallaapp.dev")!
     }()
     
     static let privacyPolicy: URL! = URL(string: "\(appWebsite.absoluteString)/privacy")

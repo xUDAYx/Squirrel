@@ -270,7 +270,7 @@ struct SettingsView: View {
     
     var footer: some View {
         VStack(alignment: .center) {
-            Text("Squirrel")
+            Text("Galla")
                 .bold()
             
             Text("Ver. \(version ?? "")")

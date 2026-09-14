@@ -8,13 +8,13 @@
 import Foundation
 
 enum Vars {
-    static let groupName: String = "group.dev.squirrelapp.squirrel"
-    
-    static let appIdentifier: String = Bundle.main.bundleIdentifier ?? "dev.squirrelapp.squirrel"
-    
-    static let widgetIdentifier: String = appIdentifier + ".squirrelWidget"
-    
-    static let iCloudContainerIdentifier: String = "iCloud.dev.squirrelapp.squirrel"
+    static let groupName: String = "group.com.xudayx.galla"
+
+    static let appIdentifier: String = Bundle.main.bundleIdentifier ?? "com.xudayx.galla"
+
+    static let widgetIdentifier: String = appIdentifier + ".gallaWidget"
+
+    static let iCloudContainerIdentifier: String = "iCloud.com.xudayx.galla"
     
     static let privacyBlur: CGFloat = 10
 }

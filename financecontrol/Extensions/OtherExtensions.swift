@@ -17,7 +17,7 @@ extension Bundle {
         return infoDictionary?["CFBundleVersion"] as? String
     }
     
-    static let mainIdentifier: String = Bundle.main.bundleIdentifier ?? "dev.squirrelapp.squirrel"
+    static let mainIdentifier: String = Bundle.main.bundleIdentifier ?? "com.xudayx.galla"
     
     var displayName: String? {
         return object(forInfoDictionaryKey: "CFBundleDisplayName") as? String

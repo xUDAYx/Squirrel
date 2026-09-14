@@ -11,7 +11,7 @@ import CoreData
 @available(iOS 16.0, *)
 struct LogExpenseIntent: AppIntent {
     static var title: LocalizedStringResource = "Log Expense"
-    static var description: IntentDescription = "Quickly add an expense to Squirrel"
+    static var description: IntentDescription = "Quickly add an expense to Galla"
     static var openAppWhenRun: Bool = false
 
     @Parameter(title: "Amount")

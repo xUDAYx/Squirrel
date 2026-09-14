@@ -8,7 +8,7 @@
 import AppIntents
 
 @available(iOS 16.4, *)
-struct SquirrelShortcutsProvider: AppShortcutsProvider {
+struct GallaShortcutsProvider: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(
             intent: LogExpenseIntent(),

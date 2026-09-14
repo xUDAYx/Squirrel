@@ -40,7 +40,7 @@ extension CustomIcon {
         case .neonNight:
             "It's probably all LED's nowadays"
         case .winterized:
-            "Even a squirrel needs a hat in winter"
+            "Stay warm, save smart"
         case .dawnOfSquipan:
             "App of the rising sun"
         case .NA:

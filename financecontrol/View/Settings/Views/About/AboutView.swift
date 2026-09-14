@@ -83,7 +83,7 @@ struct AboutView: View {
     private var aboutHeader: some View {
         VStack(alignment: .center) {
             let imageName = (UIApplication.shared.alternateIconName ?? "AppIcon") + "_Image"
-            let appName = Bundle.main.displayName ?? "Squirrel"
+            let appName = Bundle.main.displayName ?? "Galla"
             
             Image(imageName, bundle: .main)
             
@@ -127,7 +127,7 @@ struct AboutView: View {
                 urlToOpen = .review
                 showReviewConfirmationDialog.toggle()
             }
-            .confirmationDialog("Review Squirrel on the App Store", isPresented: $showReviewConfirmationDialog, titleVisibility: .visible, presenting: urlToOpen) { url in
+            .confirmationDialog("Review Galla on the App Store", isPresented: $showReviewConfirmationDialog, titleVisibility: .visible, presenting: urlToOpen) { url in
                 Button("Open in the App Store") {
                     openURL(url)
                 }
