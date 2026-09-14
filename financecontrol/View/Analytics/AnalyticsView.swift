@@ -211,13 +211,21 @@ struct AnalyticsView: View {
                     let isToday = day == todayDay
 
                     ZStack {
-                        RoundedRectangle(cornerRadius: 4)
+                        RoundedRectangle(cornerRadius: 6)
                             .fill(Color.accentColor.opacity(amount > 0 ? max(intensity * 0.8, 0.1) : 0.03))
 
-                        Text("\(day)")
-                            .font(.caption2)
-                            .fontWeight(isToday ? .bold : .regular)
-                            .foregroundStyle(isToday ? Color.accentColor : .primary)
+                        VStack(spacing: 1) {
+                            Text("\(day)")
+                                .font(.caption2)
+                                .fontWeight(isToday ? .bold : .regular)
+                                .foregroundStyle(isToday ? Color.accentColor : .primary)
+
+                            Text(shortAmount(amount))
+                                .font(.system(size: 8))
+                                .foregroundStyle(amount > 0 ? (isToday ? Color.accentColor : .primary) : .secondary)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.6)
+                        }
                     }
                     .aspectRatio(1, contentMode: .fit)
                 }
@@ -359,5 +367,12 @@ struct AnalyticsView: View {
             return "-\(formatted)"
         }
         return formatted
+    }
+
+    private func shortAmount(_ amount: Double) -> String {
+        if amount == 0 { return "0" }
+        if amount >= 100_000 { return String(format: "%.0fL", amount / 100_000) }
+        if amount >= 1_000 { return String(format: "%.1fk", amount / 1_000) }
+        return String(format: "%.0f", amount)
     }
 }
