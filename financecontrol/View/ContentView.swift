@@ -214,12 +214,15 @@ struct ContentView: View {
             .tag(1)
     }
     
+    @ViewBuilder
     private var analyticsTab: some View {
-        AnalyticsView()
-            .tabItem {
-                Label("Analytics", systemImage: "chart.bar.xaxis")
-            }
-            .tag(2)
+        if #available(iOS 16.0, *) {
+            AnalyticsView()
+                .tabItem {
+                    Label("Analytics", systemImage: "chart.bar.xaxis")
+                }
+                .tag(2)
+        }
     }
 
     private var settingsTab: some View {

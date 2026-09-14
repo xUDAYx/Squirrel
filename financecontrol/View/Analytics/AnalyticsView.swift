@@ -21,6 +21,7 @@ struct MonthlyBarData: Identifiable {
 
 // MARK: - AnalyticsView
 
+@available(iOS 16.0, *)
 struct AnalyticsView: View {
     @EnvironmentObject
     private var cdm: CoreDataModel
