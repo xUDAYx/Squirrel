@@ -82,7 +82,9 @@ struct ContentView: View {
     @State
     private var scrollToTop: Int? = nil
     
-    let cloudSyncWasEnabled = NSUbiquitousKeyValueStore.default.bool(forKey: UDKey.iCloudSync.rawValue)
+    let cloudSyncWasEnabled: Bool = FileManager.default.ubiquityIdentityToken != nil
+        ? NSUbiquitousKeyValueStore.default.bool(forKey: UDKey.iCloudSync.rawValue)
+        : false
     
     init() {
         let ratesViewModel = RatesViewModel()
