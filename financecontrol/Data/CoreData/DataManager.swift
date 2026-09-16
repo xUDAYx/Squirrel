@@ -15,10 +15,13 @@ final class DataManager {
     lazy private(set) var backgroundContext: NSManagedObjectContext = container.newBackgroundContext()
 
     init() {
-        let container =  NSPersistentCloudKitContainer(name: "DataContainer")
-        
+        let iCloudAvailable = FileManager.default.ubiquityIdentityToken != nil
+        let container: NSPersistentContainer = iCloudAvailable
+            ? NSPersistentCloudKitContainer(name: "DataContainer")
+            : NSPersistentContainer(name: "DataContainer")
+
         if let storeDescription = container.persistentStoreDescriptions.first {
-            if !NSUbiquitousKeyValueStore.default.bool(forKey: UDKey.iCloudSync.rawValue) {
+            if !iCloudAvailable || !NSUbiquitousKeyValueStore.default.bool(forKey: UDKey.iCloudSync.rawValue) {
                 storeDescription.configuration = "Default"
                 storeDescription.cloudKitContainerOptions = nil
             }
