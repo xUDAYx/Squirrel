@@ -35,36 +35,44 @@ final class CloudKitManager: ObservableObject {
     @Published
     private(set) var accountStatus: CKAccountStatus?
     
-    private let container = CKContainer(identifier: Vars.iCloudContainerIdentifier)
+    private let container: CKContainer?
     private let cloudKitCoreDataZoneID = CKRecordZone.ID(zoneName: "com.apple.coredata.cloudkit.zone")
     private let ckOperationConfig: CKOperation.Configuration
-    
+
     #if DEBUG
     private let logger = Logger(subsystem: Vars.appIdentifier, category: #fileID)
     #endif
-    
+
     fileprivate init() {
         #if DEBUG
         logger.debug("CloudKitManager init")
         #endif
-        
+
         let config = CKOperation.Configuration()
         config.timeoutIntervalForRequest = 3
         config.timeoutIntervalForResource = 10
         config.isLongLived = false
         self.ckOperationConfig = config
-        
+
+        if FileManager.default.ubiquityIdentityToken != nil {
+            self.container = CKContainer(identifier: Vars.iCloudContainerIdentifier)
+        } else {
+            self.container = nil
+        }
+
+        guard let container else { return }
+
         Task { [weak self, container] in
             do {
                 let status = try await container.accountStatus()
-                
+
                 await MainActor.run { [weak self] in
                     self?.accountStatus = status
                 }
-                
+
                 if NSUbiquitousKeyValueStore.default.bool(forKey: UDKey.iCloudSync.rawValue), status != .available {
                     NSUbiquitousKeyValueStore.default.set(false, forKey: UDKey.iCloudSync.rawValue)
-                    
+
                     await MainActor.run {
                         CustomAlertManager.shared.addAlert(
                             .init(type: .error, title: "iCloud sync turned off", description: "Sign in your iCloud account on device or allow Squirrel to use iCloud in settings.", systemImage: "exclamationmark.icloud.fill")
@@ -75,7 +83,7 @@ final class CloudKitManager: ObservableObject {
                 print(error)
             }
         }
-        
+
         Task { [weak self] in
             await self?.updateCloudKitContent()
         }
@@ -88,6 +96,8 @@ final class CloudKitManager: ObservableObject {
     }
     
     func fetchRates(timestamp recordName: String) async throws -> (editDate: Date, rates: Rates) {
+        guard let container else { throw CloudKitError.networkUnavailable }
+
         func getRatesRecord(recordName: CKRecord.ID) async throws -> CKRecord {
             do {
                 return try await container.publicCloudDatabase.configuredWith(configuration: ckOperationConfig) { configuredDatabase in
@@ -99,7 +109,7 @@ final class CloudKitManager: ObservableObject {
                     CustomAlertManager.shared.addAlert(.init(type: .error, title: "No rates found", description: "\(recordName)", systemImage: "exclamationmark.circle"))
                 }
                 #endif
-                
+
                 return try await container.publicCloudDatabase.record(for: CKRecord.ID(recordName: "latest"))
             } catch CKError.networkUnavailable, CKError.serviceUnavailable, CKError.networkFailure, CKError.operationCancelled {
                 throw CloudKitError.networkUnavailable
@@ -140,6 +150,7 @@ final class CloudKitManager: ObservableObject {
     }
     
     func updateCloudKitContent(forceUpdate: Bool = false) async {
+        guard let container else { return }
         let publicDB = container.publicCloudDatabase
         
         let urlVersion = try? await publicDB.record(for: CKRecord.ID(recordName: "AllURLUpdateVersion"))
@@ -159,6 +170,7 @@ final class CloudKitManager: ObservableObject {
     }
     
     private func updateAppURLS(urlVersion: Int) async {
+        guard let container else { return }
         let publicDB = container.publicCloudDatabase
         var count = 0
         let udKeys = UDKey.urlKeys
@@ -213,6 +225,7 @@ final class CloudKitManager: ObservableObject {
     }
     
     private func updateSocialNetworks(socialVersion: Int) async {
+        guard let container else { return }
         let publicDB = container.publicCloudDatabase
         
         do {
@@ -225,10 +238,10 @@ final class CloudKitManager: ObservableObject {
     }
     
     func dropUserDataFromPublicDatabase() async throws {
-        guard accountStatus == .available else {
+        guard let container, accountStatus == .available else {
             return
         }
-        
+
         let zoneIDs = try await container.privateCloudDatabase.allRecordZones()
         
         if zoneIDs.contains(where: { $0.zoneID == cloudKitCoreDataZoneID }) {
@@ -238,10 +251,10 @@ final class CloudKitManager: ObservableObject {
     }
     
     func hasDataInCloudKit() async -> Bool {
-        guard accountStatus == .available else {
+        guard let container, accountStatus == .available else {
             return false
         }
-        
+
         let zoneIDs = try? await container.privateCloudDatabase.allRecordZones()
         
         guard let zoneIDs else { return true }
