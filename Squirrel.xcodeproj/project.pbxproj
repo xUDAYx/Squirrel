@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8D00D75C2B5801C900E8C70D /* Vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D00D75B2B5801C900E8C70D /* Vars.swift */; };
+		A1B2C3D42E9F4A1B8C7D6E50 /* GallaIncomeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D32E9F4A1B8C7D6E50 /* GallaIncomeStore.swift */; };
 		8D00D75D2B5801C900E8C70D /* Vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D00D75B2B5801C900E8C70D /* Vars.swift */; };
 		8D02AA792CBFE63300C4B4F6 /* ExportCSVView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D02AA782CBFE63300C4B4F6 /* ExportCSVView.swift */; };
 		8D02AA7B2CBFE69900C4B4F6 /* ExportCSVViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D02AA7A2CBFE69900C4B4F6 /* ExportCSVViewModel.swift */; };
@@ -131,7 +132,6 @@
 		8D9DD6712D317EE60061DA6B /* WhatsNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9DD6702D317EE60061DA6B /* WhatsNewView.swift */; };
 		8D9E22D82AE6A1BD00801932 /* CustomShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9E22D72AE6A1BD00801932 /* CustomShareSheet.swift */; };
 		8D9F30E92B4D7C3E00A0B8C3 /* WidgetsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D9F30E82B4D7C3E00A0B8C3 /* WidgetsManager.swift */; };
-		8DA2DC6B2EE1D34100EE3B47 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 8DA2DC6A2EE1D34100EE3B47 /* AppIcon.icon */; };
 		8DA2E5102C24662F00FA7FDB /* ReturnRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DA2E50F2C24662F00FA7FDB /* ReturnRow.swift */; };
 		8DAA0E1F2B48367D0076B81E /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DAA0E1E2B48367D0076B81E /* WidgetKit.framework */; };
 		8DAA0E212B48367D0076B81E /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8DAA0E202B48367D0076B81E /* SwiftUI.framework */; };
@@ -228,6 +228,7 @@
 
 /* Begin PBXFileReference section */
 		8D00D75B2B5801C900E8C70D /* Vars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vars.swift; sourceTree = "<group>"; };
+		A1B2C3D32E9F4A1B8C7D6E50 /* GallaIncomeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GallaIncomeStore.swift; sourceTree = "<group>"; };
 		8D02AA782CBFE63300C4B4F6 /* ExportCSVView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportCSVView.swift; sourceTree = "<group>"; };
 		8D02AA7A2CBFE69900C4B4F6 /* ExportCSVViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportCSVViewModel.swift; sourceTree = "<group>"; };
 		8D0429D82A9B8B2D00A09BB4 /* BarChartBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = BarChartBar.swift; path = financecontrol/View/Home/Views/BarChartBar.swift; sourceTree = SOURCE_ROOT; };
@@ -345,7 +346,6 @@
 		8D9DD6702D317EE60061DA6B /* WhatsNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewView.swift; sourceTree = "<group>"; };
 		8D9E22D72AE6A1BD00801932 /* CustomShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomShareSheet.swift; sourceTree = "<group>"; };
 		8D9F30E82B4D7C3E00A0B8C3 /* WidgetsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetsManager.swift; sourceTree = "<group>"; };
-		8DA2DC6A2EE1D34100EE3B47 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		8DA2E50F2C24662F00FA7FDB /* ReturnRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnRow.swift; sourceTree = "<group>"; };
 		8DAA0E1C2B48367D0076B81E /* SquirrelWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SquirrelWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		8DAA0E1E2B48367D0076B81E /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -605,6 +605,7 @@
 				8D91DB822B74EB8A0040C2CE /* ChartData */,
 				8DAFF8A42B39CEA4001D5A9D /* CoreData */,
 				8D6059E02AB874C30043A293 /* Rates */,
+				A1B2C3D32E9F4A1B8C7D6E50 /* GallaIncomeStore.swift */,
 				8D4E081B2AAA163800B3544F /* Currency.swift */,
 				8D8439E82CD120E700D2054D /* SocialNetwork.swift */,
 				8D0F2FA82F193E7800F7E96E /* Place.swift */,
@@ -752,7 +753,6 @@
 		8DA2DC692EE1D32000EE3B47 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
-				8DA2DC6A2EE1D34100EE3B47 /* AppIcon.icon */,
 			);
 			path = Icons;
 			sourceTree = "<group>";
@@ -1158,7 +1158,6 @@
 				8DF8AE9C2AB47334006D287B /* .gitignore in Resources */,
 				8D4FE3002BA9D954001009F2 /* PrivacyInfo.xcprivacy in Resources */,
 				8D7FCA552B16A59C009AAAEB /* Localizable.xcstrings in Resources */,
-				8DA2DC6B2EE1D34100EE3B47 /* AppIcon.icon in Resources */,
 				8D1A7FB72C99DD2E00BAF6A0 /* LICENSE in Resources */,
 				8D4927672AB2128F008E6347 /* README.md in Resources */,
 				8DBFEBD22A49ED4900165414 /* Assets.xcassets in Resources */,
@@ -1226,6 +1225,7 @@
 				8DCB302F2A97578F00DC9ABB /* View+Extensions.swift in Sources */,
 				8D044C032C35A88E00868A21 /* StatsViewModel.swift in Sources */,
 				8D88CDC32AA0E37000668DEC /* SpendingEntity+CoreDataProperties.swift in Sources */,
+				A1B2C3D42E9F4A1B8C7D6E50 /* GallaIncomeStore.swift in Sources */,
 				8DFE477E2D20315200AA3B9F /* ICloudSyncView.swift in Sources */,
 				8D6E441B2B18C6E800FDFF9D /* ReturnsModel.swift in Sources */,
 				8D8439E92CD120E700D2054D /* SocialNetwork.swift in Sources */,
@@ -1631,8 +1631,6 @@
 		8DBFEBEF2A49ED4900165414 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = AppIcon_FirstFlight;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = financecontrol/financecontrol.entitlements;
@@ -1675,8 +1673,6 @@
 		8DBFEBF02A49ED4900165414 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = AppIcon_FirstFlight;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = financecontrol/financecontrol.entitlements;

@@ -17,7 +17,7 @@ struct OnboardingWelcomeView: View {
         HStack {
             VStack(alignment: .leading, spacing: 0) {
                 if showIcon {
-                    Image(.onboarding)
+                    Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
                         .clipShape(RoundedRectangle(cornerRadius: 30))
                         .overlay {
                             RoundedRectangle(cornerRadius: 30)
@@ -45,7 +45,7 @@ struct OnboardingWelcomeView: View {
                 }
                 
                 if showBottomText {
-                    Text("Squirrel")
+                    Text("Galla")
                         .foregroundColor(.orange)
                         .font(.system(size: 60, weight: .black))
                         .padding(.vertical, -10)

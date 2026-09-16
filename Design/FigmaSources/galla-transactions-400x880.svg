@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="880" viewBox="0 0 400 880">
+  <title>Screen/Transactions</title>
+  <style>
+    .ui { font-family: "SF Pro Display", "SF Pro", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; fill: #0A0A0D; }
+    .rounded { font-family: "SF Pro Rounded", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif; fill: #0A0A0D; }
+    .secondary { fill: #85858F; }
+    .positive { fill: #16C784; }
+    .line { stroke: #E8E8EC; stroke-width: 1; }
+    .icon { fill: none; stroke: #0A0A0D; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  </style>
+
+  <g id="Screen-Transactions">
+    <rect id="Background" width="400" height="880" rx="36" fill="#FFFFFF"/>
+
+    <g id="Status-Bar">
+      <text class="ui" x="24" y="31" font-size="14" font-weight="700">9:41</text>
+    </g>
+
+    <g id="Header">
+      <text class="ui" x="24" y="82" font-size="30" font-weight="700" letter-spacing="-0.8">Transactions</text>
+      <g id="Search-Button" transform="translate(347 61)">
+        <circle class="icon" cx="9" cy="9" r="8"/>
+        <path class="icon" d="M15 15l8 8"/>
+        <rect x="-7" y="-7" width="44" height="44" fill="transparent"/>
+      </g>
+    </g>
+
+    <g id="Period-Control">
+      <rect x="132" y="104" width="136" height="42" rx="21" fill="#FFFFFF" stroke="#0A0A0D" stroke-width="1.5"/>
+      <text class="ui" x="188" y="130" text-anchor="middle" font-size="16">This month</text>
+      <path class="icon" d="M240 121l6 6 6-6"/>
+    </g>
+
+    <g id="Type-Segmented-Control">
+      <rect x="24" y="164" width="352" height="48" rx="24" fill="#F3F3F5"/>
+      <rect x="24" y="164" width="118" height="48" rx="24" fill="#0A0A0D"/>
+      <text class="ui" x="83" y="194" text-anchor="middle" font-size="15" font-weight="500" fill="#FFFFFF" style="fill:#FFFFFF">All</text>
+      <text class="ui" x="200" y="194" text-anchor="middle" font-size="15" font-weight="500">Expense</text>
+      <text class="ui" x="318" y="194" text-anchor="middle" font-size="15" font-weight="500">Income</text>
+    </g>
+
+    <g id="Transaction-List" data-layout="vertical" data-gap="0">
+      <g id="Day-Group-Today" data-layout="vertical">
+        <text class="ui" x="24" y="252" font-size="23" font-weight="700">Today</text>
+
+        <g id="Transaction-Row-Lunch" data-row-height="64" data-min-hit-area="44">
+          <text x="25" y="302" font-family="Apple Color Emoji" font-size="31">🍽️</text>
+          <text class="ui" x="82" y="290" font-size="17" font-weight="600">Lunch</text>
+          <text class="ui secondary" x="82" y="311" font-size="14">Food</text>
+          <text class="rounded" x="376" y="298" text-anchor="end" font-size="18" font-weight="600">−₹450</text>
+          <line class="line" x1="24" y1="328" x2="376" y2="328"/>
+        </g>
+
+        <g id="Transaction-Row-Uber" data-row-height="64" data-min-hit-area="44">
+          <text x="25" y="366" font-family="Apple Color Emoji" font-size="31">🚕</text>
+          <text class="ui" x="82" y="354" font-size="17" font-weight="600">Uber</text>
+          <text class="ui secondary" x="82" y="375" font-size="14">Transport</text>
+          <text class="rounded" x="376" y="362" text-anchor="end" font-size="18" font-weight="600">−₹320</text>
+          <line class="line" x1="24" y1="392" x2="376" y2="392"/>
+        </g>
+
+        <g id="Transaction-Row-Coffee" data-row-height="64" data-min-hit-area="44">
+          <text x="25" y="430" font-family="Apple Color Emoji" font-size="31">☕️</text>
+          <text class="ui" x="82" y="418" font-size="17" font-weight="600">Coffee</text>
+          <text class="ui secondary" x="82" y="439" font-size="14">Food</text>
+          <text class="rounded" x="376" y="426" text-anchor="end" font-size="18" font-weight="600">−₹180</text>
+        </g>
+      </g>
+
+      <g id="Day-Group-Yesterday" data-layout="vertical">
+        <text class="ui" x="24" y="489" font-size="23" font-weight="700">Yesterday</text>
+
+        <g id="Transaction-Row-Groceries" data-row-height="64" data-min-hit-area="44">
+          <text x="25" y="539" font-family="Apple Color Emoji" font-size="31">🛒</text>
+          <text class="ui" x="82" y="527" font-size="17" font-weight="600">Groceries</text>
+          <text class="ui secondary" x="82" y="548" font-size="14">Groceries</text>
+          <text class="rounded" x="376" y="535" text-anchor="end" font-size="18" font-weight="600">−₹1,250</text>
+          <line class="line" x1="24" y1="565" x2="376" y2="565"/>
+        </g>
+
+        <g id="Transaction-Row-Shopping" data-row-height="64" data-min-hit-area="44">
+          <text x="25" y="603" font-family="Apple Color Emoji" font-size="31">🛍️</text>
+          <text class="ui" x="82" y="591" font-size="17" font-weight="600">Shopping</text>
+          <text class="ui secondary" x="82" y="612" font-size="14">Shopping</text>
+          <text class="rounded" x="376" y="599" text-anchor="end" font-size="18" font-weight="600">−₹2,400</text>
+          <line class="line" x1="24" y1="629" x2="376" y2="629"/>
+        </g>
+
+        <g id="Transaction-Row-Salary" data-row-height="64" data-min-hit-area="44">
+          <text x="25" y="667" font-family="Apple Color Emoji" font-size="31">💰</text>
+          <text class="ui" x="82" y="655" font-size="17" font-weight="600">Salary</text>
+          <text class="ui secondary" x="82" y="676" font-size="14">Income</text>
+          <text class="rounded positive" x="376" y="663" text-anchor="end" font-size="18" font-weight="600">+₹80,000</text>
+        </g>
+      </g>
+    </g>
+
+    <g id="Navigation-Bottom-Bar">
+      <line class="line" x1="0" y1="768" x2="400" y2="768"/>
+
+      <g id="Nav-Transactions-Active" transform="translate(43 812)">
+        <path d="M-10-14h20v28l-4-3-4 3-4-3-4 3-4-3z" fill="#0A0A0D"/>
+        <path d="M-5-7h10M-5-1h10M-5 5h7" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round"/>
+        <rect x="-22" y="-22" width="44" height="44" fill="transparent"/>
+      </g>
+
+      <g id="Nav-Wallet" transform="translate(122 812)">
+        <path class="icon" d="M-10-8h18a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4h-18a4 4 0 0 1-4-4V-4a4 4 0 0 1 4-4zM-8-8v-3a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v3"/>
+        <rect x="-22" y="-22" width="44" height="44" fill="transparent"/>
+      </g>
+
+      <g id="Nav-Add" transform="translate(200 812)">
+        <circle cx="0" cy="0" r="23" fill="#0A0A0D"/>
+        <path d="M-10 0h20M0-10v20" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"/>
+        <rect x="-24" y="-24" width="48" height="48" fill="transparent"/>
+      </g>
+
+      <g id="Nav-Analytics" transform="translate(278 812)">
+        <path class="icon" d="M-13 13V2h5v11M-3 13V-8h5v21M7 13V-2h5v15"/>
+        <rect x="-22" y="-22" width="44" height="44" fill="transparent"/>
+      </g>
+
+      <g id="Nav-Settings" transform="translate(357 812)">
+        <circle class="icon" cx="0" cy="0" r="6"/>
+        <circle class="icon" cx="0" cy="0" r="13"/>
+        <path class="icon" d="M0-19v6M0 13v6M-19 0h6M13 0h6M-13.5-13.5l4.3 4.3M9.2 9.2l4.3 4.3M13.5-13.5l-4.3 4.3M-9.2 9.2l-4.3 4.3"/>
+        <rect x="-22" y="-22" width="44" height="44" fill="transparent"/>
+      </g>
+
+      <rect id="Home-Indicator" x="140" y="859" width="120" height="5" rx="2.5" fill="#0A0A0D"/>
+    </g>
+  </g>
+</svg>

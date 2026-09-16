@@ -8,7 +8,7 @@
 import Foundation
 
 extension URL {
-    static let addExpenseAction: URL! = URL(string: "squirrel://addExpense")
+    static let addExpenseAction: URL! = URL(string: "galla://addExpense")
     
     static let github: URL = {
         UserDefaults.standard.url(forKey: UDKey.githubURL.rawValue) ?? URL(string: "https://github.com/PinkXaciD/Squirrel")!
