@@ -171,7 +171,15 @@ extension RatesViewModel {
 #if DEBUG
         logger.info("Rates Fetch initiated for \(timestamp?.formatted(date: .abbreviated, time: .shortened) ?? "No timestamp")")
 #endif
-        
+
+        #if !ICLOUD_ENABLED
+        let fallbackDate = timestamp ?? .now
+        let fallbackRates = Rates(
+            timestamp: DateFormatter.forRatesTimestamp.string(from: fallbackDate),
+            rates: Rates.fallback.rates
+        )
+        return (fallbackDate, fallbackRates)
+        #else
         let ckManager = CloudKitManager.shared
         let dateFormatter = DateFormatter.forRatesTimestamp
         
@@ -199,6 +207,7 @@ extension RatesViewModel {
         cache[timestampString] = result.rates
         
         return result
+        #endif
     }
 }
 

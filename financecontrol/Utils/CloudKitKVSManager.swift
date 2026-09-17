@@ -16,26 +16,24 @@ final class CloudKitKVSManager: ObservableObject {
     private var valueSubscription: AnyCancellable?
 
     init(store: NSUbiquitousKeyValueStore? = nil) {
-        let iCloudAvailable = FileManager.default.ubiquityIdentityToken != nil
+        #if ICLOUD_ENABLED
+        let kvs = store ?? .default
+        self.store = kvs
+        self.iCloudSync = kvs.bool(forKey: UDKey.iCloudSync.rawValue)
 
-        if iCloudAvailable {
-            let kvs = store ?? .default
-            self.store = kvs
-            self.iCloudSync = kvs.bool(forKey: UDKey.iCloudSync.rawValue)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(update(_:)),
+            name: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
+            object: kvs
+        )
 
-            NotificationCenter.default.addObserver(
-                self,
-                selector: #selector(update(_:)),
-                name: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
-                object: kvs
-            )
-
-            self.toggleKVS()
-            kvs.synchronize()
-        } else {
-            self.store = nil
-            self.iCloudSync = false
-        }
+        self.toggleKVS()
+        kvs.synchronize()
+        #else
+        self.store = nil
+        self.iCloudSync = false
+        #endif
     }
 
     deinit {

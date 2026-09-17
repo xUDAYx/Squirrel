@@ -56,6 +56,8 @@ struct ContentView: View {
     @State
     private var addExpenseAction: Bool = false
     @State
+    private var addTransactionInitialDate: Date = .now
+    @State
     private var hideContent: Bool = false
     
     private var selection: Binding<Int> {
@@ -64,6 +66,9 @@ struct ContentView: View {
         },
         set: {
             if $0 == 2 {
+                if self.selectionValue != 0 {
+                    self.addTransactionInitialDate = .now
+                }
                 self.addExpenseAction = true
                 return
             }
@@ -82,9 +87,11 @@ struct ContentView: View {
     @State
     private var scrollToTop: Int? = nil
     
-    let cloudSyncWasEnabled: Bool = FileManager.default.ubiquityIdentityToken != nil
-        ? NSUbiquitousKeyValueStore.default.bool(forKey: UDKey.iCloudSync.rawValue)
-        : false
+    #if ICLOUD_ENABLED
+    let cloudSyncWasEnabled = NSUbiquitousKeyValueStore.default.bool(forKey: UDKey.iCloudSync.rawValue)
+    #else
+    let cloudSyncWasEnabled = false
+    #endif
     
     init() {
         let ratesViewModel = RatesViewModel()
@@ -123,6 +130,7 @@ struct ContentView: View {
         .animation(.easeOut(duration: 0.1), value: hideContent)
         .onOpenURL { url in
             if url == .addExpenseAction {
+                addTransactionInitialDate = .now
                 addExpenseAction = true
             }
         }
@@ -132,7 +140,11 @@ struct ContentView: View {
         .environmentObject(cdm)
         .environmentObject(rvm)
         .sheet(isPresented: $addExpenseAction) {
-            GallaAddTransactionView(ratesViewModel: rvm, coreDataModel: cdm)
+            GallaAddTransactionView(
+                ratesViewModel: rvm,
+                coreDataModel: cdm,
+                initialDate: addTransactionInitialDate
+            )
         }
         .sheet(isPresented: $presentOnboarding) {
             OnboardingView()
@@ -167,7 +179,11 @@ struct ContentView: View {
     }
     
     private var homeTab: some View {
-        GallaHomeView(showAddTransaction: $addExpenseAction)
+        GallaHomeView(
+            showAddTransaction: $addExpenseAction,
+            addTransactionInitialDate: $addTransactionInitialDate
+        )
+        .environmentObject(privacyMonitor)
         .tabItem {
             Label("Home", systemImage: "house.fill")
         }
@@ -262,7 +278,17 @@ private enum GallaStyle {
         colorScheme == .dark ? .black : .white
     }
 
+    static func displayName(for category: String) -> String {
+        let trimmed = category.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard leadingEmoji(in: trimmed) != nil else { return trimmed }
+        let name = String(trimmed.dropFirst()).trimmingCharacters(in: .whitespacesAndNewlines)
+        return name.isEmpty ? trimmed : name
+    }
+
     static func emoji(for category: String) -> String {
+        let trimmed = category.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let emoji = leadingEmoji(in: trimmed) { return String(emoji) }
+
         let value = category.lowercased()
         if value.contains("food") || value.contains("lunch") || value.contains("restaurant") { return "🍽️" }
         if value.contains("grocer") { return "🛒" }
@@ -283,6 +309,14 @@ private enum GallaStyle {
         if value.contains("gift") { return "🎁" }
         if value == "other" { return "💵" }
         return "🧾"
+    }
+
+    private static func leadingEmoji(in category: String) -> Character? {
+        guard let first = category.first else { return nil }
+        let isEmoji = first.unicodeScalars.contains {
+            $0.properties.isEmojiPresentation || $0.value == 0xFE0F
+        }
+        return isEmoji ? first : nil
     }
 
     static func amount(_ value: Double, currency: String = UserDefaults.defaultCurrency()) -> String {
@@ -329,13 +363,11 @@ private struct GallaTransactionRow: View {
     let spending: SpendingEntity
 
     var body: some View {
-        HStack(spacing: 14) {
-            Text(GallaStyle.emoji(for: spending.categoryName))
-                .font(.title2)
-                .frame(width: 34)
+        HStack(spacing: 12) {
+            GallaTransactionEmoji(category: spending.categoryName)
 
             VStack(alignment: .leading, spacing: 3) {
-                Text(spending.categoryName)
+                Text(GallaStyle.displayName(for: spending.categoryName))
                     .font(.body.weight(.semibold))
                     .foregroundColor(.primary)
                 if let place = spending.place, !place.isEmpty {
@@ -361,13 +393,11 @@ private struct GallaIncomeRow: View {
     let record: GallaIncomeRecord
 
     var body: some View {
-        HStack(spacing: 14) {
-            Text(GallaStyle.emoji(for: record.category))
-                .font(.title2)
-                .frame(width: 34)
+        HStack(spacing: 12) {
+            GallaTransactionEmoji(category: record.category)
 
             VStack(alignment: .leading, spacing: 3) {
-                Text(record.category)
+                Text(GallaStyle.displayName(for: record.category))
                     .font(.body.weight(.semibold))
                 if let place = record.place, !place.isEmpty {
                     Text(place).font(.caption).foregroundColor(.secondary)
@@ -382,21 +412,48 @@ private struct GallaIncomeRow: View {
         .padding(.vertical, 12)
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(record.category), income \(GallaStyle.amount(record.amount, currency: record.currency))")
+        .accessibilityLabel("\(GallaStyle.displayName(for: record.category)), income \(GallaStyle.amount(record.amount, currency: record.currency))")
+    }
+}
+
+private struct GallaTransactionEmoji: View {
+    @Environment(\.colorScheme) private var colorScheme
+    let category: String
+
+    var body: some View {
+        Text(GallaStyle.emoji(for: category))
+            .font(.system(size: 30))
+            .frame(width: 42, height: 42)
+            .shadow(
+                color: Color.black.opacity(colorScheme == .dark ? 0.5 : 0.2),
+                radius: 2.5,
+                x: 0,
+                y: 2
+            )
+            .accessibilityHidden(true)
     }
 }
 
 // MARK: - Home
 
+private enum GallaTransactionDeletion {
+    case expense(SpendingEntity)
+    case income(GallaIncomeRecord)
+}
+
 private struct GallaHomeView: View {
     @Environment(\.colorScheme) private var colorScheme
+    @EnvironmentObject private var cdm: CoreDataModel
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \SpendingEntity.date, ascending: false)])
     private var spendings: FetchedResults<SpendingEntity>
 
     @Binding var showAddTransaction: Bool
+    @Binding var addTransactionInitialDate: Date
     @State private var showSearch = false
     @State private var showMonthPicker = false
     @State private var monthOffset = 0
+    @State private var monthDragTranslation: CGFloat = 0
+    @State private var monthPreviewOffsetDelta = 0
     @State private var selectedSpending: SpendingEntity?
     @State private var incomeRecords = GallaIncomeStore.shared.list()
 
@@ -461,6 +518,10 @@ private struct GallaHomeView: View {
         .onReceive(NotificationCenter.default.publisher(for: GallaIncomeStore.didChangeNotification)) { _ in
             incomeRecords = GallaIncomeStore.shared.list()
         }
+        .onAppear(perform: syncAddTransactionDate)
+        .onChange(of: monthOffset) { _ in
+            syncAddTransactionDate()
+        }
     }
 
     private var header: some View {
@@ -511,52 +572,214 @@ private struct GallaHomeView: View {
     }
 
     private var inlineMonthPicker: some View {
-        ScrollViewReader { proxy in
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(Array(stride(from: 11, through: 0, by: -1)), id: \.self) { offset in
-                        let date = Calendar.current.date(byAdding: .month, value: -offset, to: .now) ?? .now
-                        let selected = monthOffset == offset
+        GeometryReader { geometry in
+            let cellWidth: CGFloat = 64
+            let cellPitch = cellWidth + 8
 
-                        Button {
-                            withAnimation(.easeInOut(duration: 0.22)) {
-                                monthOffset = offset
-                                showMonthPicker = false
-                            }
-                        } label: {
-                            VStack(spacing: 1) {
-                                Text(date, format: .dateTime.month(.abbreviated))
-                                    .font(.subheadline.weight(selected ? .semibold : .medium))
-                                Text(date, format: .dateTime.year())
-                                    .font(.caption2)
-                                    .opacity(selected ? 0.78 : 0.55)
-                            }
-                            .foregroundColor(selected ? GallaStyle.actionForeground(for: colorScheme) : .primary)
-                            .frame(width: 64, height: 44)
-                            .background(
-                                RoundedRectangle(cornerRadius: 15, style: .continuous)
-                                    .fill(selected ? GallaStyle.actionBackground(for: colorScheme) : Color.clear)
-                            )
-                        }
-                        .buttonStyle(.plain)
-                        .id(offset)
-                        .accessibilityLabel(date.formatted(.dateTime.month(.wide).year()))
-                        .accessibilityAddTraits(selected ? .isSelected : [])
-                    }
-                }
-                .padding(8)
-            }
-            .background(
+            ZStack {
                 RoundedRectangle(cornerRadius: 20, style: .continuous)
                     .fill(GallaStyle.softBackground)
-            )
-            .onAppear {
-                DispatchQueue.main.async {
-                    proxy.scrollTo(monthOffset, anchor: .center)
-                }
+
+                movingMonthRow(cellWidth: cellWidth)
+                    .offset(x: monthDragTranslation)
+                    .mask(monthPickerSharpContentMask)
+
+                movingMonthRow(cellWidth: cellWidth)
+                    .offset(x: monthDragTranslation)
+                    .blur(radius: 2.8)
+                    .mask(monthPickerBlurredEdgesMask)
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
+
+                fixedMonthSelection(cellWidth: cellWidth)
+                    .allowsHitTesting(false)
             }
+            .frame(width: geometry.size.width, height: 60)
+            .contentShape(Rectangle())
+            .highPriorityGesture(monthDragGesture(cellPitch: cellPitch))
         }
         .frame(height: 60)
+        .mask(monthPickerFadeMask)
+        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+    }
+
+    private func movingMonthRow(cellWidth: CGFloat) -> some View {
+        HStack(spacing: 8) {
+            // Keep guard cells outside the maximum one-gesture travel so the
+            // rounded strip never reveals an empty edge while rubber-banding.
+            ForEach(-30...30, id: \.self) { position in
+                let candidateOffset = monthOffset - position
+                let date = Calendar.current.date(byAdding: .month, value: -candidateOffset, to: .now) ?? .now
+                let isUpcoming = candidateOffset < 0
+
+                Button {
+                    selectMonth(offset: candidateOffset)
+                } label: {
+                    VStack(spacing: 1) {
+                        Text(date, format: .dateTime.month(.abbreviated))
+                            .font(.subheadline.weight(.medium))
+                        Text(date, format: .dateTime.year())
+                            .font(.caption2)
+                            .opacity(0.55)
+                    }
+                    .foregroundColor(isUpcoming ? .secondary.opacity(0.42) : .primary)
+                    .frame(width: cellWidth, height: 44)
+                }
+                .buttonStyle(.plain)
+                .disabled(isUpcoming)
+                .accessibilityLabel(date.formatted(.dateTime.month(.wide).year()))
+                .accessibilityValue(isUpcoming ? "Upcoming" : (candidateOffset == monthOffset ? "Selected" : ""))
+                .accessibilityAddTraits(candidateOffset == monthOffset ? .isSelected : [])
+            }
+        }
+    }
+
+    private func fixedMonthSelection(cellWidth: CGFloat) -> some View {
+        VStack(spacing: 1) {
+            Text(previewedMonthDate, format: .dateTime.month(.abbreviated))
+                .font(.subheadline.weight(.semibold))
+            Text(previewedMonthDate, format: .dateTime.year())
+                .font(.caption2)
+                .opacity(0.78)
+        }
+        .foregroundColor(GallaStyle.actionForeground(for: colorScheme))
+        .frame(width: cellWidth, height: 44)
+        .background(
+            RoundedRectangle(cornerRadius: 15, style: .continuous)
+                .fill(GallaStyle.actionBackground(for: colorScheme))
+        )
+        .accessibilityHidden(true)
+    }
+
+    private var previewedMonthOffset: Int {
+        max(0, monthOffset + monthPreviewOffsetDelta)
+    }
+
+    private var previewedMonthDate: Date {
+        Calendar.current.date(byAdding: .month, value: -previewedMonthOffset, to: .now) ?? .now
+    }
+
+    private var monthPickerFadeMask: some View {
+        HStack(spacing: 0) {
+            LinearGradient(colors: [.clear, .black], startPoint: .leading, endPoint: .trailing)
+                .frame(width: 28)
+            Color.black
+            LinearGradient(colors: [.black, .clear], startPoint: .leading, endPoint: .trailing)
+                .frame(width: 28)
+        }
+    }
+
+    private var monthPickerSharpContentMask: some View {
+        LinearGradient(
+            stops: [
+                .init(color: .clear, location: 0),
+                .init(color: .black, location: 0.14),
+                .init(color: .black, location: 0.86),
+                .init(color: .clear, location: 1)
+            ],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+    }
+
+    private var monthPickerBlurredEdgesMask: some View {
+        LinearGradient(
+            stops: [
+                .init(color: .black, location: 0),
+                .init(color: .clear, location: 0.2),
+                .init(color: .clear, location: 0.8),
+                .init(color: .black, location: 1)
+            ],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+    }
+
+    private func monthDragGesture(cellPitch: CGFloat) -> some Gesture {
+        DragGesture(minimumDistance: 8)
+            .onChanged { value in
+                let resistedTranslation = rubberBandedMonthTranslation(
+                    value.translation.width,
+                    cellPitch: cellPitch
+                )
+                monthDragTranslation = resistedTranslation
+                let rawDelta = Int((resistedTranslation / cellPitch).rounded())
+                let clampedDelta = min(24, max(-24, rawDelta))
+                let selectableOffset = max(0, monthOffset + clampedDelta)
+                let selectableDelta = selectableOffset - monthOffset
+                if selectableDelta != monthPreviewOffsetDelta {
+                    monthPreviewOffsetDelta = selectableDelta
+                    HapticManager.shared.impact(.light)
+                }
+            }
+            .onEnded { _ in
+                commitMonthDrag(cellPitch: cellPitch)
+            }
+    }
+
+    private func rubberBandedMonthTranslation(_ translation: CGFloat, cellPitch: CGFloat) -> CGFloat {
+        let newerMonthsAvailable = min(monthOffset, 24)
+        let lowerLimit = -CGFloat(newerMonthsAvailable) * cellPitch
+        let upperLimit = CGFloat(24) * cellPitch
+
+        if translation < lowerLimit {
+            return lowerLimit + rubberBandDistance(
+                translation - lowerLimit,
+                dimension: cellPitch * 0.8
+            )
+        }
+
+        if translation > upperLimit {
+            return upperLimit + rubberBandDistance(
+                translation - upperLimit,
+                dimension: cellPitch * 0.8
+            )
+        }
+
+        return translation
+    }
+
+    private func rubberBandDistance(_ distance: CGFloat, dimension: CGFloat) -> CGFloat {
+        let magnitude = abs(distance)
+        let resistedMagnitude = (0.55 * magnitude * dimension) / (dimension + 0.55 * magnitude)
+        return distance < 0 ? -resistedMagnitude : resistedMagnitude
+    }
+
+    private func commitMonthDrag(cellPitch: CGFloat) {
+        let selectedOffset = previewedMonthOffset
+        let selectedDelta = selectedOffset - monthOffset
+        guard selectedDelta != 0 else {
+            withAnimation(.spring(response: 0.26, dampingFraction: 0.86)) {
+                monthDragTranslation = 0
+            }
+            monthPreviewOffsetDelta = 0
+            return
+        }
+
+        withAnimation(.easeOut(duration: 0.12)) {
+            monthDragTranslation = CGFloat(selectedDelta) * cellPitch
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) {
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            withTransaction(transaction) {
+                monthOffset = selectedOffset
+                monthDragTranslation = 0
+                monthPreviewOffsetDelta = 0
+            }
+        }
+    }
+
+    private func selectMonth(offset: Int) {
+        guard offset >= 0 else { return }
+        HapticManager.shared.impact(.light)
+        withAnimation(.easeInOut(duration: 0.22)) {
+            monthOffset = offset
+            monthDragTranslation = 0
+            monthPreviewOffsetDelta = 0
+            showMonthPicker = false
+        }
     }
 
     private var selectedMonthLabel: String {
@@ -566,11 +789,12 @@ private struct GallaHomeView: View {
 
     private var summary: some View {
         VStack(alignment: .leading, spacing: 20) {
-            HStack(alignment: .firstTextBaseline, spacing: 10) {
+            HStack(alignment: .firstTextBaseline, spacing: 12) {
                 Text(GallaStyle.amount(remaining))
-                    .font(.system(size: 50, weight: .bold, design: .rounded))
-                    .minimumScaleFactor(0.55)
+                    .font(.system(size: 60, weight: .bold, design: .rounded))
+                    .minimumScaleFactor(0.48)
                     .lineLimit(1)
+                    .layoutPriority(1)
 
                 VStack(spacing: 4) {
                     Text("left")
@@ -580,7 +804,9 @@ private struct GallaHomeView: View {
                         .fill(Color.primary)
                         .frame(width: 48, height: 2)
                 }
+                .fixedSize(horizontal: true, vertical: false)
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
 
             HStack(spacing: 0) {
                 summaryMetric(title: GallaStyle.amount(income), subtitle: "income")
@@ -611,7 +837,7 @@ private struct GallaHomeView: View {
     private var recentTransactions: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                Text("Today")
+                Text(monthOffset == 0 ? "This month" : selectedMonthLabel)
                     .font(.title2.bold())
                 Spacer()
                 Text("See all")
@@ -630,7 +856,10 @@ private struct GallaHomeView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
-                    Button { showAddTransaction = true } label: {
+                    Button {
+                        syncAddTransactionDate()
+                        showAddTransaction = true
+                    } label: {
                         Text("Add expense")
                             .foregroundColor(GallaStyle.actionForeground(for: colorScheme))
                     }
@@ -641,9 +870,9 @@ private struct GallaHomeView: View {
                 .padding(28)
                 .background(RoundedRectangle(cornerRadius: GallaStyle.cornerRadius).fill(GallaStyle.softBackground))
             } else {
-                ScrollView(.vertical, showsIndicators: false) {
-                    LazyVStack(spacing: 0) {
-                        ForEach(Array(monthSpendings.enumerated()), id: \.element.objectID) { index, spending in
+                List {
+                    ForEach(Array(monthSpendings.enumerated()), id: \.element.objectID) { index, spending in
+                        VStack(spacing: 0) {
                             Button { selectedSpending = spending } label: {
                                 GallaTransactionRow(spending: spending)
                             }
@@ -651,21 +880,78 @@ private struct GallaHomeView: View {
 
                             if index < monthSpendings.count - 1 || !monthIncome.isEmpty {
                                 Divider()
-                                    .padding(.leading, 48)
+                                    .padding(.leading, 54)
                             }
                         }
+                        .listRowInsets(EdgeInsets())
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            Button(role: .destructive) {
+                                delete(.expense(spending))
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                                    .labelStyle(.iconOnly)
+                            }
+                        }
+                    }
 
-                        ForEach(Array(monthIncome.enumerated()), id: \.element.id) { index, income in
+                    ForEach(Array(monthIncome.enumerated()), id: \.element.id) { index, income in
+                        VStack(spacing: 0) {
                             GallaIncomeRow(record: income)
 
                             if index < monthIncome.count - 1 {
                                 Divider()
-                                    .padding(.leading, 48)
+                                    .padding(.leading, 54)
+                            }
+                        }
+                        .listRowInsets(EdgeInsets())
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            Button(role: .destructive) {
+                                delete(.income(income))
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                                    .labelStyle(.iconOnly)
                             }
                         }
                     }
-                    .padding(.bottom, 12)
                 }
+                .listStyle(.plain)
+                .environment(\.defaultMinListRowHeight, 0)
+            }
+        }
+    }
+
+    private func syncAddTransactionDate() {
+        let calendar = Calendar.autoupdatingCurrent
+        let selectedMonth = calendar.date(byAdding: .month, value: -monthOffset, to: .now) ?? .now
+        let selectedMonthComponents = calendar.dateComponents([.year, .month], from: selectedMonth)
+        let currentComponents = calendar.dateComponents([.day, .hour, .minute, .second], from: .now)
+
+        guard let monthStart = calendar.date(from: selectedMonthComponents),
+              let validDays = calendar.range(of: .day, in: .month, for: monthStart) else {
+            addTransactionInitialDate = selectedMonth
+            return
+        }
+
+        var targetComponents = selectedMonthComponents
+        targetComponents.day = min(currentComponents.day ?? 1, validDays.count)
+        targetComponents.hour = currentComponents.hour
+        targetComponents.minute = currentComponents.minute
+        targetComponents.second = currentComponents.second
+        addTransactionInitialDate = calendar.date(from: targetComponents) ?? selectedMonth
+    }
+
+    private func delete(_ transaction: GallaTransactionDeletion) {
+        switch transaction {
+        case .expense(let spending):
+            cdm.deleteSpending(spending)
+            HapticManager.shared.notification(.success)
+        case .income(let income):
+            if GallaIncomeStore.shared.delete(income) {
+                HapticManager.shared.notification(.success)
             }
         }
     }
@@ -730,6 +1016,7 @@ private enum GallaDateFilter: String, CaseIterable, Identifiable {
 }
 
 private struct GallaTransactionsView: View {
+    @EnvironmentObject private var cdm: CoreDataModel
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \SpendingEntity.date, ascending: false)])
     private var spendings: FetchedResults<SpendingEntity>
 
@@ -776,56 +1063,82 @@ private struct GallaTransactionsView: View {
 
     var body: some View {
         NavigationView {
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: 24) {
-                    if !filteredIncome.isEmpty {
-                        VStack(alignment: .leading, spacing: 0) {
-                            HStack {
-                                Text("Income").font(.title3.bold())
-                                Spacer()
-                                Text("+" + GallaStyle.amount(filteredIncome.reduce(0) { $0 + GallaStyle.convertedAmount($1) }))
-                                    .font(.subheadline.weight(.semibold))
-                                    .foregroundColor(.green)
-                            }
-                            ForEach(filteredIncome) { income in
+            List {
+                if !filteredIncome.isEmpty {
+                    Section {
+                        ForEach(Array(filteredIncome.enumerated()), id: \.element.id) { index, income in
+                            VStack(spacing: 0) {
                                 GallaIncomeRow(record: income)
-                                if income.id != filteredIncome.last?.id { Divider().padding(.leading, 48) }
+                                if index < filteredIncome.count - 1 {
+                                    Divider().padding(.leading, 54)
+                                }
+                            }
+                            .listRowInsets(transactionRowInsets)
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                deleteSwipeButton(for: .income(income))
                             }
                         }
-                    }
-
-                    ForEach(grouped, id: \.0) { date, items in
-                        VStack(alignment: .leading, spacing: 0) {
-                            HStack {
-                                Text(sectionTitle(date)).font(.title3.bold())
-                                Spacer()
-                                Text("−" + GallaStyle.amount(items.reduce(0) { $0 + GallaStyle.convertedAmount($1) }))
-                                    .font(.subheadline.weight(.semibold))
-                                    .foregroundColor(.secondary)
-                            }
-                            ForEach(items) { spending in
-                                Button { selectedSpending = spending } label: { GallaTransactionRow(spending: spending) }
-                                    .buttonStyle(.plain)
-                                if spending.id != items.last?.id { Divider().padding(.leading, 48) }
-                            }
-                        }
-                    }
-
-                    if filtered.isEmpty && filteredIncome.isEmpty {
-                        VStack(spacing: 12) {
-                            Image(systemName: "magnifyingglass")
-                                .font(.largeTitle)
-                            Text("No matching transactions").font(.headline)
-                            Text("Try another search or clear your filters.")
-                                .foregroundColor(.secondary)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 80)
+                    } header: {
+                        transactionSectionHeader(
+                            title: "Income",
+                            amount: "+" + GallaStyle.amount(filteredIncome.reduce(0) { $0 + GallaStyle.convertedAmount($1) }),
+                            amountColor: .green
+                        )
+                        .textCase(nil)
+                        .padding(.top, 8)
                     }
                 }
-                .padding(.horizontal, GallaStyle.horizontalPadding)
-                .padding(.bottom, 24)
+
+                ForEach(grouped, id: \.0) { date, items in
+                    Section {
+                        ForEach(Array(items.enumerated()), id: \.element.objectID) { index, spending in
+                            VStack(spacing: 0) {
+                                Button { selectedSpending = spending } label: {
+                                    GallaTransactionRow(spending: spending)
+                                }
+                                .buttonStyle(.plain)
+
+                                if index < items.count - 1 {
+                                    Divider().padding(.leading, 54)
+                                }
+                            }
+                            .listRowInsets(transactionRowInsets)
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.clear)
+                            .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                                deleteSwipeButton(for: .expense(spending))
+                            }
+                        }
+                    } header: {
+                        transactionSectionHeader(
+                            title: sectionTitle(date),
+                            amount: "−" + GallaStyle.amount(items.reduce(0) { $0 + GallaStyle.convertedAmount($1) }),
+                            amountColor: .secondary
+                        )
+                        .textCase(nil)
+                        .padding(.top, 8)
+                    }
+                }
+
+                if filtered.isEmpty && filteredIncome.isEmpty {
+                    VStack(spacing: 12) {
+                        Image(systemName: "magnifyingglass")
+                            .font(.largeTitle)
+                        Text("No matching transactions").font(.headline)
+                        Text("Try another search or clear your filters.")
+                            .foregroundColor(.secondary)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 80)
+                    .listRowInsets(transactionRowInsets)
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
+                }
             }
+            .listStyle(.plain)
+            .environment(\.defaultMinListRowHeight, 0)
             .navigationTitle("Transactions")
             .searchable(text: $search, prompt: "Category, place or note")
             .toolbar {
@@ -846,6 +1159,43 @@ private struct GallaTransactionsView: View {
         }
         .sheet(item: $selectedSpending) { spending in
             GallaTransactionDetailView(spending: spending)
+        }
+    }
+
+    private var transactionRowInsets: EdgeInsets {
+        EdgeInsets(top: 0, leading: GallaStyle.horizontalPadding, bottom: 0, trailing: GallaStyle.horizontalPadding)
+    }
+
+    private func transactionSectionHeader(title: String, amount: String, amountColor: Color) -> some View {
+        HStack {
+            Text(title)
+                .font(.title3.bold())
+                .foregroundColor(.primary)
+            Spacer()
+            Text(amount)
+                .font(.subheadline.weight(.semibold))
+                .foregroundColor(amountColor)
+        }
+    }
+
+    private func deleteSwipeButton(for transaction: GallaTransactionDeletion) -> some View {
+        Button(role: .destructive) {
+            delete(transaction)
+        } label: {
+            Label("Delete", systemImage: "trash")
+                .labelStyle(.iconOnly)
+        }
+    }
+
+    private func delete(_ transaction: GallaTransactionDeletion) {
+        switch transaction {
+        case .expense(let spending):
+            cdm.deleteSpending(spending)
+            HapticManager.shared.notification(.success)
+        case .income(let income):
+            if GallaIncomeStore.shared.delete(income) {
+                HapticManager.shared.notification(.success)
+            }
         }
     }
 
@@ -907,7 +1257,7 @@ private struct GallaFilterView: View {
                         Button { toggle(category.id) } label: {
                             HStack {
                                 Text(GallaStyle.emoji(for: category.name ?? ""))
-                                Text(category.name ?? "Untitled").foregroundColor(.primary)
+                                Text(GallaStyle.displayName(for: category.name ?? "Untitled")).foregroundColor(.primary)
                                 Spacer()
                                 if let id = category.id, selectedCategories.contains(id) { Image(systemName: "checkmark").foregroundColor(.primary) }
                             }
@@ -985,7 +1335,7 @@ private struct GallaAnalyticsView: View {
                                 VStack(spacing: 8) {
                                     HStack {
                                         Text(GallaStyle.emoji(for: item.0))
-                                        Text(item.0).fontWeight(.semibold)
+                                        Text(GallaStyle.displayName(for: item.0)).fontWeight(.semibold)
                                         Spacer()
                                         Text(GallaStyle.amount(item.1)).fontWeight(.semibold)
                                     }
@@ -1051,10 +1401,23 @@ private struct GallaAddTransactionView: View {
     @State private var detailsFocus: GallaTransactionDetailsEditor.Field = .place
     @State private var isIncome = false
     @State private var incomeCategory = "Salary"
+    @State private var dateDragTranslation: CGFloat = 0
+    @State private var datePreviewDayOffset = 0
 
-    init(ratesViewModel: RatesViewModel, coreDataModel: CoreDataModel) {
+    init(
+        ratesViewModel: RatesViewModel,
+        coreDataModel: CoreDataModel,
+        initialDate: Date = .now
+    ) {
         self.coreDataModel = coreDataModel
-        _vm = StateObject(wrappedValue: AddSpendingViewModel(ratesViewModel: ratesViewModel, coreDataModel: coreDataModel, places: coreDataModel.places))
+        _vm = StateObject(
+            wrappedValue: AddSpendingViewModel(
+                ratesViewModel: ratesViewModel,
+                coreDataModel: coreDataModel,
+                places: coreDataModel.places,
+                initialDate: initialDate
+            )
+        )
     }
 
     private let keys = [["1", "2", "3"], ["4", "5", "6"], ["7", "8", "9"], [".", "0", "checkmark"]]
@@ -1146,24 +1509,174 @@ private struct GallaAddTransactionView: View {
     }
 
     private var dateStrip: some View {
+        GeometryReader { geometry in
+            let cellWidth = max(34, (geometry.size.width - 48) / 7)
+            let cellPitch = cellWidth + 8
+
+            ZStack {
+                movingDateRow(cellWidth: cellWidth)
+                    .offset(x: dateDragTranslation)
+                    .mask(dateStripSharpContentMask)
+
+                movingDateRow(cellWidth: cellWidth)
+                    .offset(x: dateDragTranslation)
+                    .blur(radius: 2.8)
+                    .mask(dateStripBlurredEdgesMask)
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
+
+                fixedDateSelection(cellWidth: cellWidth)
+                    .allowsHitTesting(false)
+            }
+            .frame(width: geometry.size.width, height: 64)
+            .contentShape(Rectangle())
+            .highPriorityGesture(dateDragGesture(cellPitch: cellPitch))
+        }
+        .frame(height: 64)
+        .mask(dateStripFadeMask)
+        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+    }
+
+    private var dateCalendar: Calendar {
+        var calendar = Calendar.autoupdatingCurrent
+        calendar.firstWeekday = 2
+        return calendar
+    }
+
+    private func movingDateRow(cellWidth: CGFloat) -> some View {
         HStack(spacing: 8) {
-            ForEach(-3...3, id: \.self) { offset in
-                let date = Calendar.current.date(byAdding: .day, value: offset, to: .now) ?? .now
-                let selected = Calendar.current.isDate(date, inSameDayAs: vm.date)
+            ForEach(-30...30, id: \.self) { dayOffset in
+                let date = dateCalendar.date(byAdding: .day, value: dayOffset, to: vm.date) ?? vm.date
+
                 Button {
-                    if date <= .now { vm.date = date }
+                    selectDay(date)
                 } label: {
                     VStack(spacing: 4) {
-                        Text(date, format: .dateTime.weekday(.abbreviated)).font(.caption2)
-                        Text(date, format: .dateTime.day()).font(.headline)
+                        Text(date, format: .dateTime.weekday(.abbreviated))
+                            .font(.caption2)
+                        Text(date, format: .dateTime.day())
+                            .font(.headline)
                     }
-                    .foregroundColor(selected ? GallaStyle.actionForeground(for: colorScheme) : (date > .now ? .secondary.opacity(0.45) : .primary))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                    .background(RoundedRectangle(cornerRadius: 16).fill(selected ? GallaStyle.actionBackground(for: colorScheme) : Color.clear))
+                    .foregroundColor(.primary)
+                    .frame(width: cellWidth)
+                    .frame(height: 58)
                 }
-                .disabled(date > .now)
+                .buttonStyle(.plain)
+                .accessibilityLabel(date.formatted(date: .complete, time: .omitted))
+                .accessibilityAddTraits(dateCalendar.isDate(date, inSameDayAs: vm.date) ? .isSelected : [])
             }
+        }
+    }
+
+    private func fixedDateSelection(cellWidth: CGFloat) -> some View {
+        VStack(spacing: 4) {
+            Text(previewedDate, format: .dateTime.weekday(.abbreviated))
+                .font(.caption2)
+            Text(previewedDate, format: .dateTime.day())
+                .font(.headline)
+        }
+        .foregroundColor(GallaStyle.actionForeground(for: colorScheme))
+        .frame(width: cellWidth, height: 58)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(GallaStyle.actionBackground(for: colorScheme))
+        )
+        .accessibilityHidden(true)
+    }
+
+    private var previewedDate: Date {
+        dateCalendar.date(byAdding: .day, value: datePreviewDayOffset, to: vm.date) ?? vm.date
+    }
+
+    private var dateStripFadeMask: some View {
+        HStack(spacing: 0) {
+            LinearGradient(colors: [.clear, .black], startPoint: .leading, endPoint: .trailing)
+                .frame(width: 28)
+            Color.black
+            LinearGradient(colors: [.black, .clear], startPoint: .leading, endPoint: .trailing)
+                .frame(width: 28)
+        }
+    }
+
+    private var dateStripSharpContentMask: some View {
+        LinearGradient(
+            stops: [
+                .init(color: .clear, location: 0),
+                .init(color: .black, location: 0.14),
+                .init(color: .black, location: 0.86),
+                .init(color: .clear, location: 1)
+            ],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+    }
+
+    private var dateStripBlurredEdgesMask: some View {
+        LinearGradient(
+            stops: [
+                .init(color: .black, location: 0),
+                .init(color: .clear, location: 0.2),
+                .init(color: .clear, location: 0.8),
+                .init(color: .black, location: 1)
+            ],
+            startPoint: .leading,
+            endPoint: .trailing
+        )
+    }
+
+    private func dateDragGesture(cellPitch: CGFloat) -> some Gesture {
+        DragGesture(minimumDistance: 8)
+            .onChanged { value in
+                dateDragTranslation = value.translation.width
+                let rawOffset = Int((-value.translation.width / cellPitch).rounded())
+                let clampedOffset = min(30, max(-30, rawOffset))
+                if clampedOffset != datePreviewDayOffset {
+                    datePreviewDayOffset = clampedOffset
+                    HapticManager.shared.impact(.light)
+                }
+            }
+            .onEnded { _ in
+                commitDateDrag(cellPitch: cellPitch)
+            }
+    }
+
+    private func commitDateDrag(cellPitch: CGFloat) {
+        let selectedOffset = datePreviewDayOffset
+        guard selectedOffset != 0,
+              let selectedDate = dateCalendar.date(byAdding: .day, value: selectedOffset, to: vm.date) else {
+            withAnimation(.spring(response: 0.26, dampingFraction: 0.86)) {
+                dateDragTranslation = 0
+            }
+            return
+        }
+
+        withAnimation(.easeOut(duration: 0.12)) {
+            dateDragTranslation = -CGFloat(selectedOffset) * cellPitch
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) {
+            var transaction = Transaction()
+            transaction.disablesAnimations = true
+            withTransaction(transaction) {
+                vm.date = selectedDate
+                dateDragTranslation = 0
+                datePreviewDayOffset = 0
+            }
+        }
+    }
+
+    private func selectDay(_ date: Date) {
+        let changedDay = !dateCalendar.isDate(date, inSameDayAs: vm.date)
+        var selectedComponents = dateCalendar.dateComponents([.year, .month, .day], from: date)
+        let currentTime = dateCalendar.dateComponents([.hour, .minute, .second], from: vm.date)
+        selectedComponents.hour = currentTime.hour
+        selectedComponents.minute = currentTime.minute
+        selectedComponents.second = currentTime.second
+        vm.date = dateCalendar.date(from: selectedComponents) ?? date
+        dateDragTranslation = 0
+        datePreviewDayOffset = 0
+        if changedDay {
+            HapticManager.shared.impact(.light)
         }
     }
 
@@ -1201,13 +1714,13 @@ private struct GallaAddTransactionView: View {
             if isIncome {
                 Section("Income categories") {
                     ForEach(GallaStyle.defaultIncomeCategories, id: \.self) { category in
-                        Button("\(GallaStyle.emoji(for: category))  \(category)") { incomeCategory = category }
+                        Button("\(GallaStyle.emoji(for: category))  \(GallaStyle.displayName(for: category))") { incomeCategory = category }
                     }
                 }
             } else {
                 Section("Expense categories") {
                     ForEach(orderedExpenseCategories) { category in
-                        Button("\(GallaStyle.emoji(for: category.name ?? ""))  \(category.name ?? "Untitled")") { vm.selectedCategory = category }
+                        Button("\(GallaStyle.emoji(for: category.name ?? ""))  \(GallaStyle.displayName(for: category.name ?? "Untitled"))") { vm.selectedCategory = category }
                     }
                 }
             }
@@ -1215,7 +1728,7 @@ private struct GallaAddTransactionView: View {
             HStack(spacing: 10) {
                 Text(GallaStyle.emoji(for: isIncome ? incomeCategory : (vm.selectedCategory?.name ?? "")))
                     .font(.system(size: 26))
-                Text(isIncome ? incomeCategory : (vm.selectedCategory?.name ?? "Choose category")).fontWeight(.semibold)
+                Text(GallaStyle.displayName(for: isIncome ? incomeCategory : (vm.selectedCategory?.name ?? "Choose category"))).fontWeight(.semibold)
                 Image(systemName: "chevron.down").font(.caption.bold())
             }
             .foregroundColor(.primary)
@@ -1520,7 +2033,7 @@ private struct GallaTransactionDetailView: View {
                     VStack(spacing: 6) {
                         Text("−" + GallaStyle.amount(GallaStyle.convertedAmount(spending)))
                             .font(.system(size: 48, weight: .bold, design: .rounded))
-                        Text(spending.categoryName).font(.title3.weight(.semibold))
+                        Text(GallaStyle.displayName(for: spending.categoryName)).font(.title3.weight(.semibold))
                         Text(spending.wrappedDate.formatted(date: .long, time: .shortened)).foregroundColor(.secondary)
                     }
                     VStack(spacing: 0) {
@@ -1586,6 +2099,15 @@ private struct GallaSettingsView: View {
                     NavigationLink { CategoriesEditView() } label: { row("Categories", "square.grid.2x2", "Organize expense types") }
                     NavigationLink { DefaultCurrencySelectorView() } label: { row("Currency", "indianrupeesign.circle", currency) }
                     NavigationLink { RatesView() } label: { row("Exchange rates", "arrow.left.arrow.right", "Latest saved rates") }
+                }
+                if #available(iOS 16.4, *) {
+                    Section("Automation") {
+                        NavigationLink {
+                            ShortcutsTipView()
+                        } label: {
+                            row("Siri & Shortcuts", "wand.and.stars", "Siri, Double Back Tap & Action Button")
+                        }
+                    }
                 }
                 Section("Appearance") {
                     NavigationLink { ColorAndIconView() } label: { row("Color & app icon", "paintpalette", "Make Galla yours") }

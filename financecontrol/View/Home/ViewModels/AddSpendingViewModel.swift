@@ -59,11 +59,12 @@ final class AddSpendingViewModel: ViewModel {
     init(
         ratesViewModel rvm: RatesViewModel,
         coreDataModel cdm: CoreDataModel,
-        places: [String: Place]
+        places: [String: Place],
+        initialDate: Date = .now
     ) {
         self.amount = ""
         self.currency = UserDefaults.standard.string(forKey: UDKey.defaultSelectedCurrency.rawValue) ?? UserDefaults.standard.string(forKey: UDKey.defaultCurrency.rawValue) ?? Locale.current.currencyCode ?? "USD"
-        self.date = .now
+        self.date = initialDate
         self.selectedCategory = nil
         self.place = ""
         self.comment = ""

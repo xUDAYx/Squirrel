@@ -12,7 +12,7 @@ import OSLog
 
 func launch() {
     let dateFormatter = ISO8601DateFormatter()
-    #if DEBUG
+    #if DEBUG && ICLOUD_ENABLED
     let _ = CloudKitManager.shared
     #endif
     

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A11CE0012F7A000100000001 /* LogExpenseIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE0012F7A000100000011 /* LogExpenseIntent.swift */; };
+		A11CE0012F7A000100000002 /* CategoryAppEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE0012F7A000100000012 /* CategoryAppEntity.swift */; };
+		A11CE0012F7A000100000003 /* GallaShortcutsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE0012F7A000100000013 /* SquirrelShortcutsProvider.swift */; };
+		A11CE0012F7A000100000004 /* ShortcutsTipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11CE0012F7A000100000014 /* ShortcutsTipView.swift */; };
 		8D00D75C2B5801C900E8C70D /* Vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D00D75B2B5801C900E8C70D /* Vars.swift */; };
 		A1B2C3D42E9F4A1B8C7D6E50 /* GallaIncomeStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D32E9F4A1B8C7D6E50 /* GallaIncomeStore.swift */; };
 		8D00D75D2B5801C900E8C70D /* Vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D00D75B2B5801C900E8C70D /* Vars.swift */; };
@@ -227,6 +231,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A11CE0012F7A000100000011 /* LogExpenseIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogExpenseIntent.swift; sourceTree = "<group>"; };
+		A11CE0012F7A000100000012 /* CategoryAppEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryAppEntity.swift; sourceTree = "<group>"; };
+		A11CE0012F7A000100000013 /* SquirrelShortcutsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SquirrelShortcutsProvider.swift; sourceTree = "<group>"; };
+		A11CE0012F7A000100000014 /* ShortcutsTipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ShortcutsTipView.swift; path = View/Settings/Views/ShortcutsTipView.swift; sourceTree = "<group>"; };
 		8D00D75B2B5801C900E8C70D /* Vars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vars.swift; sourceTree = "<group>"; };
 		A1B2C3D32E9F4A1B8C7D6E50 /* GallaIncomeStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GallaIncomeStore.swift; sourceTree = "<group>"; };
 		8D02AA782CBFE63300C4B4F6 /* ExportCSVView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportCSVView.swift; sourceTree = "<group>"; };
@@ -439,6 +447,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A11CE0012F7A000100000020 /* Shortcuts */ = {
+			isa = PBXGroup;
+			children = (
+				A11CE0012F7A000100000011 /* LogExpenseIntent.swift */,
+				A11CE0012F7A000100000012 /* CategoryAppEntity.swift */,
+				A11CE0012F7A000100000013 /* SquirrelShortcutsProvider.swift */,
+			);
+			path = Shortcuts;
+			sourceTree = "<group>";
+		};
 		8D043F6B2B51A99600F2F560 /* Widget */ = {
 			isa = PBXGroup;
 			children = (
@@ -975,6 +993,8 @@
 		8DBFEBCC2A49ED4800165414 /* financecontrol */ = {
 			isa = PBXGroup;
 			children = (
+				A11CE0012F7A000100000020 /* Shortcuts */,
+				A11CE0012F7A000100000014 /* ShortcutsTipView.swift */,
 				8DAA0E322B4871F40076B81E /* financecontrol.entitlements */,
 				8D9B50132AC1BE9700C7732B /* Info.plist */,
 				8D7FCA542B16A59C009AAAEB /* Localizable.xcstrings */,
@@ -1212,6 +1232,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A11CE0012F7A000100000001 /* LogExpenseIntent.swift in Sources */,
+				A11CE0012F7A000100000002 /* CategoryAppEntity.swift in Sources */,
+				A11CE0012F7A000100000003 /* GallaShortcutsProvider.swift in Sources */,
+				A11CE0012F7A000100000004 /* ShortcutsTipView.swift in Sources */,
 				8D0681102B6D466600195205 /* PieChartCompleteView.swift in Sources */,
 				8D39C6932B1F3C9500F40FD6 /* EditReturnView.swift in Sources */,
 				8D1E71E32AAEFED6004A17B4 /* Color+Extensions.swift in Sources */,

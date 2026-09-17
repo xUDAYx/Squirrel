@@ -54,11 +54,14 @@ final class CloudKitManager: ObservableObject {
         config.isLongLived = false
         self.ckOperationConfig = config
 
-        if FileManager.default.ubiquityIdentityToken != nil {
-            self.container = CKContainer(identifier: Vars.iCloudContainerIdentifier)
-        } else {
-            self.container = nil
-        }
+        // CloudKit must be enabled by the build configuration as well as by
+        // signing entitlements. An iCloud account alone does not mean this
+        // binary is entitled to create a CKContainer.
+        #if ICLOUD_ENABLED
+        self.container = CKContainer(identifier: Vars.iCloudContainerIdentifier)
+        #else
+        self.container = nil
+        #endif
 
         guard let container else { return }
 
